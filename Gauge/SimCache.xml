@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<SimBase.Document
+        Type="AceXML"
+        version="1,0"
+        id="SimCache">
+    <Descr>AceXML Document</Descr>
+    <Filename>SimCache.xml</Filename>
+    <SimGauge.Gauge id="Gauge" ArtDirectory=".">
+        <FloatPosition>0.000,0.000</FloatPosition>
+        <Size>250,70</Size>
+        <Image id="Gauge-Base.bmp" Name="Gauge-Base.bmp">
+            <Transparent>True</Transparent>
+            <Bright>True</Bright>
+            <Bilinear>False</Bilinear>
+        </Image>
+        <Element id="Element">
+            <FloatPosition>19.000,16.000</FloatPosition>
+            <GaugeText id="GaugeText">
+                <Bright>True</Bright>
+                <FontColor>white</FontColor>
+                <FontFace>Segoe UI</FontFace>
+                <FontHeight>14</FontHeight>
+                <GaugeString>Friday Harbor</GaugeString>
+                <Size>120,40</Size>
+                <Transparent>True</Transparent>
+            </GaugeText>
+        </Element>
+        <Element id="Element">
+            <FloatPosition>19.000,38.000</FloatPosition>
+            <GaugeText id="GaugeText">
+                <Bright>True</Bright>
+                <FontColor>white</FontColor>
+                <FontFace>Segoe UI</FontFace>
+                <FontHeight>11</FontHeight>
+                <GaugeString>Less than 2nm away</GaugeString>
+                <Size>120,40</Size>
+                <Transparent>True</Transparent>
+            </GaugeText>
+        </Element>
+        <MouseArea id="MouseAreaAll">
+            <FloatPosition>0.000,0.000</FloatPosition>
+            <Size>250,70</Size>
+            <CursorType>Normal</CursorType>
+            <MouseArea id="MouseArea">
+                <FloatPosition>6.000,6.000</FloatPosition>
+                <Size>5,5</Size>
+                <CursorType>Hand</CursorType>
+            </MouseArea>
+            <MouseArea id="MouseArea">
+                <FloatPosition>6.000,59.000</FloatPosition>
+                <Size>5,5</Size>
+                <CursorType>Hand</CursorType>
+            </MouseArea>
+        </MouseArea>
+        <Element id="Element">
+            <FloatPosition>186.000,6.000</FloatPosition>
+            <Visibility>1</Visibility>
+            <Image id="Locator-5.bmp" Name="Locator-5.bmp">
+                <Transparent>True</Transparent>
+                <Bright>True</Bright>
+            </Image>
+        </Element>
+        <Element id="Element">
+            <FloatPosition>186.000,6.000</FloatPosition>
+            <Visibility>(C:SimCache:Distance) 25 &gt; if{ 0 } els{ 1 }</Visibility>
+            <Image id="Locator-4.bmp" Name="Locator-4.bmp">
+                <Transparent>True</Transparent>
+                <Bright>True</Bright>
+            </Image>
+        </Element>
+        <Element id="Element">
+            <FloatPosition>186.000,6.000</FloatPosition>
+            <Visibility>(C:SimCache:Distance) 10 &gt; if{ 0 } els{ 1 }</Visibility>
+            <Image id="Locator-3.bmp" Name="Locator-3.bmp">
+                <Transparent>True</Transparent>
+                <Bright>True</Bright>
+            </Image>
+        </Element>
+        <Element id="Element">
+            <FloatPosition>186.000,6.000</FloatPosition>
+            <Visibility>(C:SimCache:Distance) 5 &gt; if{ 0 } els{ 1 }</Visibility>
+            <Image id="Locator-2.bmp" Name="Locator-2.bmp">
+                <Transparent>True</Transparent>
+                <Bright>True</Bright>
+            </Image>
+        </Element>
+        <Element id="Element">
+            <FloatPosition>186.000,6.000</FloatPosition>
+            <Visibility>(C:SimCache:Distance) 2 &gt; if{ 0 } els{ 1 }</Visibility>
+            <Image id="Locator-1.bmp" Name="Locator-1.bmp">
+                <Transparent>True</Transparent>
+                <Bright>True</Bright>
+            </Image>
+        </Element>
+    </SimGauge.Gauge>
+</SimBase.Document>
