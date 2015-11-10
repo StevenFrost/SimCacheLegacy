@@ -21,7 +21,7 @@
                 <FontColor>white</FontColor>
                 <FontFace>Segoe UI</FontFace>
                 <FontHeight>14</FontHeight>
-                <GaugeString>Friday Harbor</GaugeString>
+                <GaugeString>%((C:SIMCACHE:Name))%!s!</GaugeString>
                 <Size>120,40</Size>
                 <Transparent>True</Transparent>
             </GaugeText>
@@ -33,7 +33,7 @@
                 <FontColor>white</FontColor>
                 <FontFace>Segoe UI</FontFace>
                 <FontHeight>11</FontHeight>
-                <GaugeString>Less than 2nm away</GaugeString>
+                <GaugeString>%((C:SIMCACHE:Status))%!s!</GaugeString>
                 <Size>120,40</Size>
                 <Transparent>True</Transparent>
             </GaugeText>
@@ -61,9 +61,10 @@
                 <Bright>True</Bright>
             </Image>
         </Element>
+        <!-- C:SIMCACHE:Distance is in meters; the locator icon is swapped out based on nautical miles -->
         <Element id="Element">
             <FloatPosition>186.000,6.000</FloatPosition>
-            <Visibility>(C:SimCache:Distance) 25 &gt; if{ 0 } els{ 1 }</Visibility>
+            <Visibility>(C:SIMCACHE:Distance) 46300 &gt; if{ 0 } els{ 1 }</Visibility>
             <Image id="Locator-4.bmp" Name="Locator-4.bmp">
                 <Transparent>True</Transparent>
                 <Bright>True</Bright>
@@ -71,7 +72,7 @@
         </Element>
         <Element id="Element">
             <FloatPosition>186.000,6.000</FloatPosition>
-            <Visibility>(C:SimCache:Distance) 10 &gt; if{ 0 } els{ 1 }</Visibility>
+            <Visibility>(C:SIMCACHE:Distance) 18520 &gt; if{ 0 } els{ 1 }</Visibility>
             <Image id="Locator-3.bmp" Name="Locator-3.bmp">
                 <Transparent>True</Transparent>
                 <Bright>True</Bright>
@@ -79,7 +80,7 @@
         </Element>
         <Element id="Element">
             <FloatPosition>186.000,6.000</FloatPosition>
-            <Visibility>(C:SimCache:Distance) 5 &gt; if{ 0 } els{ 1 }</Visibility>
+            <Visibility>(C:SIMCACHE:Distance) 9260 &gt; if{ 0 } els{ 1 }</Visibility>
             <Image id="Locator-2.bmp" Name="Locator-2.bmp">
                 <Transparent>True</Transparent>
                 <Bright>True</Bright>
@@ -87,7 +88,7 @@
         </Element>
         <Element id="Element">
             <FloatPosition>186.000,6.000</FloatPosition>
-            <Visibility>(C:SimCache:Distance) 2 &gt; if{ 0 } els{ 1 }</Visibility>
+            <Visibility>(C:SIMCACHE:Distance) 3704 &gt; if{ 0 } els{ 1 }</Visibility>
             <Image id="Locator-1.bmp" Name="Locator-1.bmp">
                 <Transparent>True</Transparent>
                 <Bright>True</Bright>

@@ -62,9 +62,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="SimCache.cpp" />
+    <ClCompile Include="Transformations.cpp" />
+    <ClCompile Include="VectorR3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimCache_Def.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SimCache.h" />
+    <ClInclude Include="Transformations.h" />
+    <ClInclude Include="VectorR3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
