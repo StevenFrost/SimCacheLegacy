@@ -61,6 +61,7 @@
                 <Bright>True</Bright>
             </Image>
         </Element>
+        <!-- C:SIMCACHE:Distance is in meters; the locator icon is swapped out based on nautical miles -->
         <Element id="Element">
             <FloatPosition>186.000,6.000</FloatPosition>
             <Visibility>(C:SIMCACHE:Distance) 46300 &gt; if{ 0 } els{ 1 }</Visibility>
