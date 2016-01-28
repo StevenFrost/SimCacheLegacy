@@ -3,26 +3,40 @@
 #include <memory>
 #include <string>
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include "SimConnect.h"
+
 #include "Transformations.h"
 #include "VectorR3.h"
 
-class SimCache
+namespace SimCache
+{
+
+//-----------------------------------------------------------------------------
+
+class ICache
 {
 public:
-    typedef std::shared_ptr<SimCache> Ptr;
+    typedef std::shared_ptr<ICache> Ptr;
 
-    SimCache(std::string const& name, double latitude, double longitude, double altitude, double acquireDistance)
-        :
-        m_name(name),
-        m_positionCartesian(Transformations::FromEllipsoidal(latitude, longitude, altitude)),
-        m_acquireDistanceMeters(acquireDistance)
-    { }
+    virtual ~ICache() {}
 
-    std::string GetName() { return m_name; }
-    double GetDistance(VectorR3 position) { return (m_positionCartesian - position).Norm(); }
-
-private:
-    std::string m_name;
-    VectorR3 m_positionCartesian;
-    double m_acquireDistanceMeters;
+    virtual std::string Name() const = 0;
+    virtual std::string Hint() const = 0;
+    virtual SIMCONNECT_DATA_INITPOSITION InitPosition() const = 0;
+    virtual double Distance(VectorR3 position) const = 0;
 };
+
+//-----------------------------------------------------------------------------
+
+class Factory
+{
+public:
+    static ICache::Ptr Make(std::string const& name, double latitude, double longitude, double altitude);
+    static ICache::Ptr Make(std::string const& name, std::string const& hint, double latitude, double longitude, double altitude, double alertDistance, double acquireDistance);
+};
+
+//-----------------------------------------------------------------------------
+
+} // namespace SimCache

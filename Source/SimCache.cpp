@@ -10,7 +10,12 @@
 #define _CRT_RAND_S
 #include "gauges.h"
 
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include "SimConnect.h"
+
 #include "SimCache.h"
+#include "SimCacheManager.h"
 #include "Transformations.h"
 #include "VectorR3.h"
 
@@ -189,6 +194,8 @@ enum SIMCACHE_VAR
     SIMCACHE_VAR_STATUS,
 };
 
+HANDLE hSimConnect;
+
 //
 // Class that implements IGaugeCCallback
 //
@@ -196,8 +203,7 @@ class SIMCACHEGaugeCallback : public IGaugeCCallback
 {
     DECLARE_PANEL_CALLBACK_REFCOUNT(SIMCACHEGaugeCallback);
 
-    // Declare member variables representing SIMCACHE state
-    SimCache m_simCache;
+    // Declare member variables representing SIMCACHE state    
     double m_distanceToSimCache;
 
     ENUM m_unitsRadians;
@@ -225,7 +231,7 @@ public:
 
     const char* getSimCacheName()
     {
-        return m_simCache.GetName().c_str();
+        return SimCache::Manager::Instance().CurrentCache()->Name().c_str();
     }
 
     const char* getSimCacheStatus()
@@ -259,15 +265,14 @@ private:
 DEFINE_PANEL_CALLBACK_REFCOUNT(SIMCACHEGaugeCallback)
 
 SIMCACHEGaugeCallback::SIMCACHEGaugeCallback(UINT32 containerId)
-    : m_RefCount(1),
-    m_containerId(containerId),
-    m_simCache("Friday Harbor Airport", 0.84686817, -2.14718016, 34.4, 100.0),
-    m_distanceToSimCache(1.0),
-    m_unitsRadians(get_units_enum("radians")),
-    m_unitsMeters(get_units_enum("meters")),
-    m_aircraftVarLatitude(get_aircraft_var_enum("PLANE LATITUDE")),
-    m_aircraftVarLongitude(get_aircraft_var_enum("PLANE LONGITUDE")),
-    m_aircraftVarAltitude(get_aircraft_var_enum("PLANE ALTITUDE"))
+: m_RefCount(1),
+m_containerId(containerId),
+m_distanceToSimCache(1.0),
+m_unitsRadians(get_units_enum("radians")),
+m_unitsMeters(get_units_enum("meters")),
+m_aircraftVarLatitude(get_aircraft_var_enum("PLANE LATITUDE")),
+m_aircraftVarLongitude(get_aircraft_var_enum("PLANE LONGITUDE")),
+m_aircraftVarAltitude(get_aircraft_var_enum("PLANE ALTITUDE"))
 { }
 
 IGaugeCCallback* SIMCACHEGaugeCallback::QueryInterface(PCSTRINGZ pszInterface)
@@ -284,7 +289,7 @@ void SIMCACHEGaugeCallback::Update()
     FLOAT64 currentLon = aircraft_varget(m_aircraftVarLongitude, m_unitsRadians, 0);
     FLOAT64 currentAlt = aircraft_varget(m_aircraftVarAltitude, m_unitsMeters, 0);
 
-    m_distanceToSimCache = m_simCache.GetDistance(Transformations::FromEllipsoidal(currentLat, currentLon, currentAlt));
+    m_distanceToSimCache = SimCache::Manager::Instance().CurrentCache()->Distance(Transformations::FromEllipsoidal(currentLat, currentLon, currentAlt));
 }
 
 //
@@ -432,6 +437,40 @@ GAUGESIMPORT ImportTable =
     { 0x00000000, NULL }
 };
 
+enum EVENT_ID {
+    EVENT_C_LEFT_BRACKET,
+    EVENT_C_RIGHT_BRACKET,
+    EVENT_C_H,
+    EVENT_DISPLAY_TEXT
+};
+enum DATA_REQUEST_ID {
+    REQUEST_CREATE_SIMCACHE,
+    REQUEST_REMOVE_SIMCACHE
+};
+
+enum GROUP_ID {
+    GROUP_SIMCACHE
+};
+
+enum INPUT_ID {
+    INPUT_SIMCACHE
+};
+
+void CALLBACK MyDispatchProcDLL(SIMCONNECT_RECV* pData, DWORD cbData, void* pContext)
+{
+    switch (pData->dwID)
+    {
+    case SIMCONNECT_RECV_ID_OPEN:
+    {
+        auto initPos = SimCache::Manager::Instance().CurrentCache()->InitPosition();
+        SimConnect_AICreateSimulatedObject(hSimConnect, "Aerocache", initPos, REQUEST_CREATE_SIMCACHE);
+    }
+    break;
+    default:
+        break;
+    }
+}
+
 void FSAPI module_init(void)
 {
     if (NULL != Panels)
@@ -439,11 +478,19 @@ void FSAPI module_init(void)
         ImportTable.PANELSentry.fnptr = (PPANELS)Panels;
         SIMCACHEPanelCallbackInit();
     }
+
+    auto hr = SimConnect_Open(&hSimConnect, "SimCache", NULL, 0, 0, 0);
+
+    if (hr == S_OK)
+    {
+        hr = SimConnect_CallDispatch(hSimConnect, MyDispatchProcDLL, NULL);
+    }
 }
 
 void FSAPI module_deinit(void)
 {
     SIMCACHEPanelCallbackDeInit();
+    SimConnect_Close(hSimConnect);
 }
 
 BOOL WINAPI DllMain(HINSTANCE hDLL, DWORD dwReason, LPVOID lpReserved)
