@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "SimCache.h"
+#include "Cache.h"
 
 namespace SimCache
 {
@@ -22,23 +22,22 @@ public:
     Manager(Manager const&) = delete;
     void operator=(Manager const&) = delete;
 
-    void AddCache(ICache::Ptr cacheToAdd);
+    void AddCache(ICache::Ptr const& cacheToAdd);
 
-    void IndexIncrement() { m_index = m_index + 1 > m_simCaches.size() -1 ? 0 : m_index + 1; }
-    void IndexDecrement() { m_index = m_index - 1 < 0 ? m_simCaches.size() -1 : m_index - 1; }
-
-    ICache::Ptr CurrentCache() { return m_simCaches[m_index]; }
+    ICache::Ptr NextCache();
+    ICache::Ptr PreviousCache();
+    ICache::Ptr CurrentCache() const { return *m_currentCache; }
 
 private:
     Manager()
         :
-        m_index(0)
+        m_currentCache(m_caches.begin())
     {
-        m_simCaches.push_back(SimCache::Factory::Make("Friday Harbor Airport", 48.5219722, -123.0243611, 112.7));
+        AddCache(Factory::Make("Friday Harbor Airport", 48.5219722, -123.0243611, 112.7));
     };
 
-    std::vector<ICache::Ptr> m_simCaches;
-    std::vector<ICache::Ptr>::size_type m_index;
+    std::vector<ICache::Ptr> m_caches;
+    std::vector<ICache::Ptr>::iterator m_currentCache;
 };
 
 //-----------------------------------------------------------------------------

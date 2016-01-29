@@ -24,7 +24,19 @@
     <ClCompile Include="Transformations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SimCacheImpl.cpp">
+    <ClCompile Include="Cache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CacheManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelCallback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AircraftCallback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SimCacheGaugeCallback.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -37,16 +49,31 @@
     <ClInclude Include="VectorR3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SimCache.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Transformations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SimCacheManager.h">
+    <ClInclude Include="Conversions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Conversions.h">
+    <ClInclude Include="Cache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CacheManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelCallback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AircraftCallback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimCacheGaugeCallback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimCacheAircraftCallback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimCachePanelCallback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

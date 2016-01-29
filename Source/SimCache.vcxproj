@@ -63,8 +63,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AircraftCallback.cpp" />
+    <ClCompile Include="PanelCallback.cpp" />
+    <ClCompile Include="CacheManager.cpp" />
     <ClCompile Include="SimCache.cpp" />
-    <ClCompile Include="SimCacheImpl.cpp" />
+    <ClCompile Include="Cache.cpp" />
+    <ClCompile Include="SimCacheGaugeCallback.cpp" />
     <ClCompile Include="Transformations.cpp" />
     <ClCompile Include="VectorR3.cpp" />
   </ItemGroup>
@@ -72,9 +76,14 @@
     <None Include="SimCache_Def.def" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AircraftCallback.h" />
     <ClInclude Include="Conversions.h" />
-    <ClInclude Include="SimCache.h" />
-    <ClInclude Include="SimCacheManager.h" />
+    <ClInclude Include="Cache.h" />
+    <ClInclude Include="CacheManager.h" />
+    <ClInclude Include="PanelCallback.h" />
+    <ClInclude Include="SimCacheAircraftCallback.h" />
+    <ClInclude Include="SimCacheGaugeCallback.h" />
+    <ClInclude Include="SimCachePanelCallback.h" />
     <ClInclude Include="Transformations.h" />
     <ClInclude Include="VectorR3.h" />
   </ItemGroup>

@@ -1,5 +1,5 @@
 #include "Conversions.h"
-#include "SimCache.h"
+#include "Cache.h"
 
 namespace SimCache
 {
