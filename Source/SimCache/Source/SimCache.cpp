@@ -1,6 +1,15 @@
-//
-//  SimCache.cpp
-//
+/**********************************************************************************
+*                                                                                *
+* Copyright (c) 2016 Steven Frost, Orion Lyau. All rights reserved.              *
+*                                                                                *
+* This source is subject to the MIT License.                                     *
+* See http://opensource.org/licenses/MIT                                         *
+*                                                                                *
+* THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,    *
+* EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED          *
+* WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.         *
+*                                                                                *
+**********************************************************************************/
 
 #pragma once
 
@@ -40,7 +49,9 @@ void SIMCACHEPanelCallbackInit()
 
     if (pPanelCallback)
     {
-        bool b = panel_register_c_callback(SIMCACHE_CALLBACK_NAME, pPanelCallback);
+        BOOL b = panel_register_c_callback(SIMCACHE_CALLBACK_NAME, pPanelCallback);
+        UNREFERENCED_PARAMETER(b);
+
         pPanelCallback->Release();
     }
 }
@@ -132,7 +143,3 @@ GAUGESLINKAGE Linkage =
 
     FS9LINK_VERSION, { 0 }
 };
-
-// 
-// end of SIMCACHE.cpp
-//

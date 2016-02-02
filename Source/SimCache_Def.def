@@ -1,5 +1,0 @@
-LIBRARY	"SimCache"
-EXPORTS
-module_init
-module_deinit
-Panels DATA
