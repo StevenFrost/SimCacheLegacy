@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{DA59AEBD-2791-4C6F-A9B1-ED665C652F4A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectName>SimCache</ProjectName>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  </PropertyGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(SolutionDir)..\Root.props" />
+    <Import Project="$(ConfigDirectory)Configurations.props" />
+    <Import Project="$(ConfigDirectory)Cpp.props" />
+  </ImportGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <CallingConvention>Cdecl</CallingConvention>
+      <AdditionalIncludeDirectories>
+        $(SourceDirectory)SimConnect\Inc;
+        %(AdditionalIncludeDirectories)
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <ModuleDefinitionFile>SimCache_Def.def</ModuleDefinitionFile>
+      <AdditionalDependencies>
+        $(SourceDirectory)SimConnect\Lib\SimConnect.lib;
+        %(AdditionalDependencies)
+      </AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Source\AircraftCallback.h" />
+    <ClInclude Include="..\Source\Conversions.h" />
+    <ClInclude Include="..\Source\Cache.h" />
+    <ClInclude Include="..\Source\CacheManager.h" />
+    <ClInclude Include="..\Source\PanelCallback.h" />
+    <ClInclude Include="..\Source\SimCacheAircraftCallback.h" />
+    <ClInclude Include="..\Source\SimCacheGaugeCallback.h" />
+    <ClInclude Include="..\Source\SimCachePanelCallback.h" />
+    <ClInclude Include="..\Source\Transformations.h" />
+    <ClInclude Include="..\Source\VectorR3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Source\AircraftCallback.cpp" />
+    <ClCompile Include="..\Source\PanelCallback.cpp" />
+    <ClCompile Include="..\Source\CacheManager.cpp" />
+    <ClCompile Include="..\Source\SimCache.cpp" />
+    <ClCompile Include="..\Source\Cache.cpp" />
+    <ClCompile Include="..\Source\SimCacheGaugeCallback.cpp" />
+    <ClCompile Include="..\Source\Transformations.cpp" />
+    <ClCompile Include="..\Source\VectorR3.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SimCache_Def.def" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
