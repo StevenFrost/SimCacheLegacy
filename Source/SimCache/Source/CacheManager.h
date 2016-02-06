@@ -43,10 +43,9 @@ public:
 
 private:
     Manager()
-        :
-        m_currentCache(m_caches.begin())
     {
         AddCache(Factory::Make("Friday Harbor Airport", 48.5219722, -123.0243611, 112.7));
+        m_currentCache = m_caches.begin();
     };
 
     std::vector<ICache::Ptr> m_caches;

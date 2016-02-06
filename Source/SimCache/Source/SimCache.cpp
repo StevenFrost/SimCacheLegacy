@@ -97,7 +97,7 @@ void CALLBACK MyDispatchProcDLL(SIMCONNECT_RECV* pData, DWORD cbData, void* pCon
     case SIMCONNECT_RECV_ID_OPEN:
     {
         auto initPos = SimCache::Manager::Instance().CurrentCache()->InitPosition();
-        SimConnect_AICreateSimulatedObject(hSimConnect, "Aerocache", initPos, REQUEST_CREATE_SIMCACHE);
+        SimConnect_AICreateSimulatedObject(hSimConnect, "SimCache", initPos, REQUEST_CREATE_SIMCACHE);
     }
     break;
     default:
