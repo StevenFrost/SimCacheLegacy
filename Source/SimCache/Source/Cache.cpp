@@ -26,8 +26,8 @@ public:
     CacheImpl(std::string const& name, std::string const& hint, double latitude, double longitude, double altitude, double alertDistance, double acquireDistance);
     ~CacheImpl() {};
 
-    virtual std::string Name() const;
-    virtual std::string Hint() const;
+    virtual std::string const& Name() const;
+    virtual std::string const& Hint() const;
     virtual SIMCONNECT_DATA_INITPOSITION InitPosition() const;
     virtual double Distance(VectorR3 position) const;
 
@@ -80,12 +80,12 @@ CacheImpl::CacheImpl(std::string const& name, std::string const& hint, double la
     m_acquireDistanceMeters(acquireDistance)
 {}
 
-std::string CacheImpl::Name() const
+std::string const& CacheImpl::Name() const
 {
     return m_name;
 }
 
-std::string CacheImpl::Hint() const
+std::string const& CacheImpl::Hint() const
 {
     return m_hint;
 }

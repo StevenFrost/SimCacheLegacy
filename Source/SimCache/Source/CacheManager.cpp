@@ -16,7 +16,31 @@
 namespace SimCache
 {
 
- void Manager::AddCache(ICache::Ptr const& cacheToAdd)
+void Manager::SetSimConnect(HANDLE hSimConnect)
+{
+    m_hSimConnect = hSimConnect;
+}
+
+void Manager::OnRecvAssignedObjectId(SIMCONNECT_RECV_ASSIGNED_OBJECT_ID * pObjData)
+{
+    switch (pObjData->dwRequestID)
+    {
+    case REQUEST_CREATE_SIMCACHE:
+        m_currentCacheId = pObjData->dwObjectID;
+        break;
+    }
+}
+
+void Manager::DisplayCache(ICache::Ptr const & cacheToDisplay)
+{
+    if (m_currentCacheId != 0UL)
+    {
+        SimConnect_AIRemoveObject(m_hSimConnect, m_currentCacheId, REQUEST_REMOVE_SIMCACHE);
+    }
+    SimConnect_AICreateSimulatedObject(m_hSimConnect, "SimCache", cacheToDisplay->InitPosition(), REQUEST_CREATE_SIMCACHE);
+}
+
+void Manager::AddCache(ICache::Ptr const& cacheToAdd)
 {
     m_caches.push_back(ICache::Ptr(cacheToAdd));
 }

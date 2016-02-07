@@ -37,17 +37,22 @@ public:
     bool SetPropertyValue(SINT32 id, PCSTRINGZ szValue);
     IGaugeCDrawable* CreateGaugeCDrawable(SINT32 id, const IGaugeCDrawableCreateParameters* pParameters);
 
-    double getSimCacheDistance()
+    double getSimCacheDistance() const
     {
         return m_distanceToSimCache;
     }
 
-    const char* getSimCacheName()
+    const char* getSimCacheName() const
     {
         return SimCache::Manager::Instance().CurrentCache()->Name().c_str();
     }
 
-    const char* getSimCacheStatus()
+    const char* getSimCacheHint() const
+    {
+        return SimCache::Manager::Instance().CurrentCache()->Hint().c_str();
+    }
+
+    const char* getSimCacheStatus() const
     {
         if (m_distanceToSimCache < 1852 * 2)
         {
@@ -71,12 +76,31 @@ public:
         }
         return "Greater than 50 nm away";
     }
+
+    double getSimCacheIndex() const
+    {
+        return m_simCacheIndex;
+    }
+
+    void setSimCacheIndex(double value)
+    {
+        if (value > m_simCacheIndex)
+        {
+            SimCache::Manager::Instance().DisplayCache(SimCache::Manager::Instance().NextCache());
+        }
+        else
+        {
+            SimCache::Manager::Instance().DisplayCache(SimCache::Manager::Instance().PreviousCache());
+        }
+        m_simCacheIndex = value;
+    }
 private:
     ULONG m_RefCount;
     UINT32 m_containerId;
 
     // Declare member variables representing SIMCACHE state    
     double m_distanceToSimCache;
+    double m_simCacheIndex;
 
     ENUM m_unitsRadians;
     ENUM m_unitsMeters;

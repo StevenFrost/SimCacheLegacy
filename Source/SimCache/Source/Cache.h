@@ -35,8 +35,8 @@ public:
 
     virtual ~ICache() {}
 
-    virtual std::string Name() const = 0;
-    virtual std::string Hint() const = 0;
+    virtual std::string const& Name() const = 0;
+    virtual std::string const& Hint() const = 0;
     virtual SIMCONNECT_DATA_INITPOSITION InitPosition() const = 0;
     virtual double Distance(VectorR3 position) const = 0;
 };

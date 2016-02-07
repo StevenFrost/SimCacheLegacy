@@ -18,7 +18,9 @@ enum SIMCACHE_VAR
 {
     SIMCACHE_VAR_DISTANCE,
     SIMCACHE_VAR_NAME,
+    SIMCACHE_VAR_HINT,
     SIMCACHE_VAR_STATUS,
+    SIMCACHE_VAR_INDEX,
 };
 
 ULONG SIMCACHEGaugeCallback::AddRef()
@@ -38,6 +40,7 @@ SIMCACHEGaugeCallback::SIMCACHEGaugeCallback(UINT32 containerId)
     : m_RefCount(1),
     m_containerId(containerId),
     m_distanceToSimCache(1.0),
+    m_simCacheIndex(0.0),
     m_unitsRadians(get_units_enum("radians")),
     m_unitsMeters(get_units_enum("meters")),
     m_aircraftVarLatitude(get_aircraft_var_enum("PLANE LATITUDE")),
@@ -80,6 +83,9 @@ bool SIMCACHEGaugeCallback::GetPropertyValue(SINT32 id, FLOAT64* pValue)
     case SIMCACHE_VAR_DISTANCE:
         *pValue = getSimCacheDistance();
         break;
+    case SIMCACHE_VAR_INDEX:
+        *pValue = getSimCacheIndex();
+        break;
     default:
         return false;
     }
@@ -104,6 +110,9 @@ bool SIMCACHEGaugeCallback::GetPropertyValue(SINT32 id, PCSTRINGZ* pszValue)
     case SIMCACHE_VAR_NAME:
         *pszValue = getSimCacheName();
         break;
+    case SIMCACHE_VAR_HINT:
+        *pszValue = getSimCacheHint();
+        break;
     case SIMCACHE_VAR_STATUS:
         *pszValue = getSimCacheStatus();
         break;
@@ -118,6 +127,16 @@ bool SIMCACHEGaugeCallback::GetPropertyValue(SINT32 id, PCSTRINGZ* pszValue)
 //
 bool SIMCACHEGaugeCallback::SetPropertyValue(SINT32 id, FLOAT64 value)
 {
+    SIMCACHE_VAR eSIMCACHEVar = (SIMCACHE_VAR)id;
+
+    switch (eSIMCACHEVar)
+    {
+    case SIMCACHE_VAR_INDEX:
+        setSimCacheIndex(value);
+        break;
+    default:
+        return false;
+    }
     return true;
 }
 
