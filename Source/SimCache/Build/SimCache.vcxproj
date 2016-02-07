@@ -43,6 +43,7 @@
     <ClInclude Include="..\Source\SimCachePanelCallback.h" />
     <ClInclude Include="..\Source\Transformations.h" />
     <ClInclude Include="..\Source\VectorR3.h" />
+    <ClInclude Include="..\Resources\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\AircraftCallback.cpp" />
@@ -56,6 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SimCache_Def.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\Resources\Metadata.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

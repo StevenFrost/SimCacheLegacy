@@ -76,5 +76,13 @@
     <ClInclude Include="..\Source\VectorR3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Resources\resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\Resources\Metadata.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
