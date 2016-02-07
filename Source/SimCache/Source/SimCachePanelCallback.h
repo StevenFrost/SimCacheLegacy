@@ -33,7 +33,7 @@ public:
     SIMCACHEPanelCallback::SIMCACHEPanelCallback()
     {
         // init property table
-        for (int n = 0; n < 5; n++)
+        for (int n = 0; n < 3; n++)
         {
             if (ImportTable.PANELSentry.fnptr != NULL && SIMCACHE_PROPERTY_TABLE[n].units == UNITS_UNKNOWN)
             {
