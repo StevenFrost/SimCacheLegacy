@@ -46,12 +46,23 @@
                 <FloatPosition>6.000,6.000</FloatPosition>
                 <Size>5,5</Size>
                 <CursorType>Hand</CursorType>
+                <MouseClick id="MouseClick">
+                    <Script>(C:SIMCACHE:Index) 1 - (&gt;C:SIMCACHE:Index)</Script>
+                    <ClickRepeat>True</ClickRepeat>
+                </MouseClick>
             </MouseArea>
             <MouseArea id="MouseArea">
                 <FloatPosition>6.000,59.000</FloatPosition>
                 <Size>5,5</Size>
                 <CursorType>Hand</CursorType>
+                <MouseClick id="MouseClick">
+                    <Script>(C:SIMCACHE:Index) 1 + (&gt;C:SIMCACHE:Index)</Script>
+                    <ClickRepeat>True</ClickRepeat>
+                </MouseClick>
             </MouseArea>
+            <Tooltip id="Tooltip">
+                <DefaultScript>%((C:SIMCACHE:Hint))%!s!</DefaultScript>
+            </Tooltip>
         </MouseArea>
         <Element id="Element">
             <FloatPosition>186.000,6.000</FloatPosition>
@@ -61,7 +72,7 @@
                 <Bright>True</Bright>
             </Image>
         </Element>
-        <!-- C:SIMCACHE:Distance is in meters; the locator icon is swapped out based on nautical miles -->
+      <!-- C:SIMCACHE:Distance is in meters; the locator icon is swapped out based on nautical miles -->
         <Element id="Element">
             <FloatPosition>186.000,6.000</FloatPosition>
             <Visibility>(C:SIMCACHE:Distance) 46300 &gt; if{ 0 } els{ 1 }</Visibility>

@@ -11,13 +11,9 @@
 *.userprefs
 
 # Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
+[Bb]uilt
 x64/
 x86/
-build/
 bld/
 [Bb]in/
 [Oo]bj/
@@ -162,6 +158,7 @@ ClientBin/
 *.publishsettings
 node_modules/
 bower_components/
+*.opendb
 
 # RIA/Silverlight projects
 Generated_Code/
@@ -194,3 +191,6 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+
+# Cabdir output
+*.CAB
