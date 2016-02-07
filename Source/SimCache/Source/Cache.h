@@ -15,10 +15,9 @@
 
 #include <memory>
 #include <string>
-
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include "SimConnect.h"
+
+#include <SimConnect.h>
 
 #include "Transformations.h"
 #include "VectorR3.h"

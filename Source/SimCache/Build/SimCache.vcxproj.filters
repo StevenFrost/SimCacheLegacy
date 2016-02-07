@@ -15,28 +15,28 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..Source\SimCache.cpp">
+    <ClCompile Include="..\Source\AircraftCallback.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..Source\VectorR3.cpp">
+    <ClCompile Include="..\Source\PanelCallback.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..Source\Transformations.cpp">
+    <ClCompile Include="..\Source\CacheManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..Source\Cache.cpp">
+    <ClCompile Include="..\Source\SimCache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..Source\CacheManager.cpp">
+    <ClCompile Include="..\Source\Cache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..Source\PanelCallback.cpp">
+    <ClCompile Include="..\Source\SimCacheGaugeCallback.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..Source\AircraftCallback.cpp">
+    <ClCompile Include="..\Source\Transformations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..Source\SimCacheGaugeCallback.cpp">
+    <ClCompile Include="..\Source\VectorR3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -46,34 +46,34 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..Source\VectorR3.h">
+    <ClInclude Include="..\Source\AircraftCallback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..Source\Transformations.h">
+    <ClInclude Include="..\Source\Conversions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..Source\Conversions.h">
+    <ClInclude Include="..\Source\Cache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..Source\Cache.h">
+    <ClInclude Include="..\Source\CacheManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..Source\CacheManager.h">
+    <ClInclude Include="..\Source\PanelCallback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..Source\PanelCallback.h">
+    <ClInclude Include="..\Source\SimCacheAircraftCallback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..Source\AircraftCallback.h">
+    <ClInclude Include="..\Source\SimCacheGaugeCallback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..Source\SimCacheGaugeCallback.h">
+    <ClInclude Include="..\Source\SimCachePanelCallback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..Source\SimCacheAircraftCallback.h">
+    <ClInclude Include="..\Source\Transformations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..Source\SimCachePanelCallback.h">
+    <ClInclude Include="..\Source\VectorR3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

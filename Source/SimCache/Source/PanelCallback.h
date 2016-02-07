@@ -13,21 +13,23 @@
 
 #pragma once
 
-#include "gauges.h"
+#include <gauges.h>
+#include <sal.h>
 
-// Note: The items in the property table correspond to the indices that
-// will be returned in the Get/Set Property functions
-struct PROPERTY_TABLE
+namespace SimCache
 {
-    PCSTRINGZ szPropertyName;
-    PCSTRINGZ szUnitsName;
-    ENUM units;
+
+//-----------------------------------------------------------------------------
+
+struct PropertyTableRow
+{
+    PCSTRINGZ PropertyName;
+    PCSTRINGZ UnitsName;
+    ENUM      Units;
 };
 
-// 
-// PanelCallback is an abstract base class that can be overrided.  Implementors
-// should override the functions CreateAircraftCallback(UINT32 ContainerId) as
-// well as GetPropertyTable.
+//-----------------------------------------------------------------------------
+
 class PanelCallback : public IPanelCCallback
 {
 public:
@@ -36,17 +38,20 @@ public:
     ULONG AddRef();
     ULONG Release();
 
-    // ******* IPanelCCallback Methods *****************    
-    IPanelCCallback* QueryInterface(PCSTRINGZ pszInterface);
+    IPanelCCallback* QueryInterface(PCSTRINGZ object) { return nullptr; }
     UINT32 GetVersion();
-    bool ConvertStringToProperty(PCSTRINGZ keyword, SINT32* pID);
-    bool ConvertPropertyToString(SINT32 id, PPCSTRINGZ pKeyword);
-    bool GetPropertyUnits(SINT32 id, ENUM* pEnum);
+
+    bool ConvertStringToProperty(PCSTRINGZ keyword, SINT32 *id);
+    bool ConvertPropertyToString(SINT32 id, PPCSTRINGZ keyword);
+    bool GetPropertyUnits(SINT32 id, ENUM *units);
 
 protected:
-    // ******** PanelCallback Methods ******************
-    virtual const PROPERTY_TABLE *GetPropertyTable(UINT &uLength) = 0;
+    virtual const PropertyTableRow *GetPropertyTable(_Out_ UINT &length) = 0;
 
 private:
-    ULONG m_RefCount;
+    ULONG m_refCount;
 };
+
+//-----------------------------------------------------------------------------
+
+} // namespace SimCache

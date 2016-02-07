@@ -13,12 +13,11 @@
 
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include "SimConnect.h"
-
 #include <memory>
 #include <vector>
+#include <windows.h>
+
+#include <SimConnect.h>
 
 #include "Cache.h"
 
@@ -27,7 +26,8 @@ namespace SimCache
 
 //-----------------------------------------------------------------------------
 
-enum DATA_REQUEST_ID {
+enum DataRequestID
+{
     REQUEST_CREATE_SIMCACHE,
     REQUEST_REMOVE_SIMCACHE
 };
@@ -46,20 +46,19 @@ public:
     Manager(Manager const&) = delete;
     void operator=(Manager const&) = delete;
 
-    void SetSimConnect(HANDLE hSimConnect);
-    void OnRecvAssignedObjectId(SIMCONNECT_RECV_ASSIGNED_OBJECT_ID *pObjData);
+    void SetSimConnect(HANDLE simConnect);
+    void OnRecvAssignedObjectId(SIMCONNECT_RECV_ASSIGNED_OBJECT_ID *objData);
     void DisplayCache(ICache::Ptr const& cacheToDisplay);
 
     void AddCache(ICache::Ptr const& cacheToAdd);
 
     ICache::Ptr NextCache();
     ICache::Ptr PreviousCache();
-    ICache::Ptr CurrentCache() const { return *m_currentCache; }
+    ICache::Ptr CurrentCache() const;
 
 private:
-    Manager()
-        :
-        m_hSimConnect(NULL),
+    Manager() :
+        m_simConnect(nullptr),
         m_currentCacheId(0UL)
     {
         AddCache(Factory::Make("Friday Harbor Airport", "This airport is the starting point for the Flight Simulator X default flight.", 48.5219722, -123.0243611, 112.7, 1000.0, 50.0));
@@ -73,7 +72,7 @@ private:
     std::vector<ICache::Ptr> m_caches;
     std::vector<ICache::Ptr>::iterator m_currentCache;
 
-    HANDLE m_hSimConnect;
+    HANDLE m_simConnect;
     unsigned long m_currentCacheId;
 };
 

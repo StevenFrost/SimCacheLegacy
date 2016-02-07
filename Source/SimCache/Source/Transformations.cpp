@@ -15,6 +15,11 @@
 
 #include <cmath>
 
+namespace SimCache
+{
+
+//-----------------------------------------------------------------------------
+
 VectorR3 Transformations::FromEllipsoidal(double phi, double lambda, double h)
 {
     auto N = a / sqrt(1.0 - (eSquared * pow(sin(phi), 2.0)));
@@ -23,3 +28,7 @@ VectorR3 Transformations::FromEllipsoidal(double phi, double lambda, double h)
     auto z = ((1.0 - eSquared) * N + h) * sin(phi);
     return VectorR3(x, y, z);
 }
+
+//-----------------------------------------------------------------------------
+
+} // namespace SimCache

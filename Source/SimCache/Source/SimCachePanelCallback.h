@@ -13,46 +13,56 @@
 
 #pragma once
 
-#include "gauges.h"
+#include <gauges.h>
+#include <sal.h>
+
 #include "PanelCallback.h"
 #include "SimCacheAircraftCallback.h"
 
-static PROPERTY_TABLE SIMCACHE_PROPERTY_TABLE[] =
+namespace SimCache
+{
+
+//-----------------------------------------------------------------------------
+
+static const unsigned int NUM_SIMCACHE_PROPERTIES = 5;
+static PropertyTableRow SIMCACHE_PROPERTY_TABLE[NUM_SIMCACHE_PROPERTIES] =
 {
     { "Distance", "Number", UNITS_UNKNOWN },
-    { "Name", "String", UNITS_STRING },
-    { "Hint", "String", UNITS_STRING },
-    { "Status", "String", UNITS_STRING },
-    { "Index", "Number", UNITS_UNKNOWN }
+    { "Name",     "String", UNITS_STRING  },
+    { "Hint",     "String", UNITS_STRING  },
+    { "Status",   "String", UNITS_STRING  },
+    { "Index",    "Number", UNITS_UNKNOWN }
 };
 
-//
-// PanelCallback Override
-//
-class SIMCACHEPanelCallback : public PanelCallback
+//-----------------------------------------------------------------------------
+
+class SimCachePanelCallback : public PanelCallback
 {
 public:
-    SIMCACHEPanelCallback::SIMCACHEPanelCallback()
+    SimCachePanelCallback()
     {
-        // init property table
-        for (int n = 0; n < 5; n++)
+        for (int n = 0; n < NUM_SIMCACHE_PROPERTIES; n++)
         {
-            if (ImportTable.PANELSentry.fnptr != NULL && SIMCACHE_PROPERTY_TABLE[n].units == UNITS_UNKNOWN)
+            if (ImportTable.PANELSentry.fnptr != NULL && SIMCACHE_PROPERTY_TABLE[n].Units == UNITS_UNKNOWN)
             {
-                SIMCACHE_PROPERTY_TABLE[n].units = get_units_enum(SIMCACHE_PROPERTY_TABLE[n].szUnitsName);
+                SIMCACHE_PROPERTY_TABLE[n].Units = get_units_enum(SIMCACHE_PROPERTY_TABLE[n].UnitsName);
             }
         }
     }
 
-    IAircraftCCallback* CreateAircraftCCallback(UINT32 ContainerID)
+    IAircraftCCallback* CreateAircraftCCallback(UINT32 containerID)
     {
-        return new SIMCACHEAircraftCallback(ContainerID);
+        return new SimCacheAircraftCallback(containerID);
     }
 
 protected:
-    const PROPERTY_TABLE *GetPropertyTable(UINT &uLength)
+    const PropertyTableRow *GetPropertyTable(_Out_ UINT &length)
     {
-        uLength = LENGTHOF(SIMCACHE_PROPERTY_TABLE);
+        length = LENGTHOF(SIMCACHE_PROPERTY_TABLE);
         return SIMCACHE_PROPERTY_TABLE;
     }
 };
+
+//-----------------------------------------------------------------------------
+
+} // namespace SimCache

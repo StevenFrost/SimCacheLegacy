@@ -15,6 +15,11 @@
 
 #include <cmath>
 
+namespace SimCache
+{
+
+//-----------------------------------------------------------------------------
+
 double VectorR3::Norm()
 {
     return sqrt((X * X) + (Y * Y) + (Z * Z));
@@ -46,3 +51,7 @@ VectorR3 operator -(VectorR3 u, VectorR3 v) {
 VectorR3 operator *(VectorR3 u, double c) {
     return VectorR3(u.X * c, u.Y * c, u.Z * c);
 }
+
+//-----------------------------------------------------------------------------
+
+} // namespace SimCache

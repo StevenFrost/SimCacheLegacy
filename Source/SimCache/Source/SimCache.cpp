@@ -13,15 +13,11 @@
 
 #pragma once
 
-#define _USE_MATH_DEFINES
+#include <gauges.h>
 #include <math.h>
-
-#define _CRT_RAND_S
-#include "gauges.h"
-
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include "SimConnect.h"
+
+#include <SimConnect.h>
 
 #include "PanelCallback.h"
 #include "AircraftCallback.h"
@@ -34,44 +30,40 @@
 #include "Transformations.h"
 #include "VectorR3.h"
 
-GAUGE_CALLBACK gauge_callback;
+namespace SimCache
+{
 
-//----------------------------------------------------------------------------
-// Static Variables
-//----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
 static const char SIMCACHE_CALLBACK_NAME[] = "SIMCACHE";
 
-HANDLE hSimConnect;
+GAUGE_CALLBACK g_gaugeCallback;
+HANDLE         g_simConnect = nullptr;
 
-void SIMCACHEPanelCallbackInit()
+//-----------------------------------------------------------------------------
+
+void PanelCallbackInit()
 {
-    SIMCACHEPanelCallback *pPanelCallback = new SIMCACHEPanelCallback();
+    SimCachePanelCallback *panelCallback = new SimCachePanelCallback();
 
-    if (pPanelCallback)
+    if (panelCallback)
     {
-        BOOL b = panel_register_c_callback(SIMCACHE_CALLBACK_NAME, pPanelCallback);
-        UNREFERENCED_PARAMETER(b);
+        BOOL result = panel_register_c_callback(SIMCACHE_CALLBACK_NAME, panelCallback);
+        UNREFERENCED_PARAMETER(result);
 
-        pPanelCallback->Release();
+        panelCallback->Release();
     }
 }
 
-void SIMCACHEPanelCallbackDeInit()
+void PanelCallbackDeInit()
 {
-    panel_register_c_callback(SIMCACHE_CALLBACK_NAME, NULL);
+    panel_register_c_callback(SIMCACHE_CALLBACK_NAME, nullptr);
 }
 
-// The Panels pointer will get filled in during the loading process
-// if this DLL is listed in DLL.XML
-PPANELS Panels = NULL;
+//-----------------------------------------------------------------------------
 
-GAUGESIMPORT ImportTable =
+enum EventID
 {
-    { 0x0000000F, (PPANELS)NULL },
-    { 0x00000000, NULL }
-};
-
-enum EVENT_ID {
     EVENT_SIM_START,
     EVENT_DISPLAY_TEXT,
     EVENT_PREV_SIMCACHE,
@@ -79,67 +71,87 @@ enum EVENT_ID {
     EVENT_SIMCACHE_HINT
 };
 
-enum GROUP_ID {
+enum GroupID
+{
     GROUP_SIMCACHE
 };
 
-enum INPUT_ID {
+enum InputID
+{
     INPUT_SIMCACHE
 };
 
+//-----------------------------------------------------------------------------
+
 void DisplayText(SIMCONNECT_TEXT_TYPE textType, float durationSeconds, std::string const& text)
 {
-    SimConnect_Text(hSimConnect, textType, durationSeconds, EVENT_DISPLAY_TEXT, text.size() + 1, (void*)text.c_str());
+    SimConnect_Text(g_simConnect, textType, durationSeconds, EVENT_DISPLAY_TEXT, text.size() + 1, (void*)text.c_str());
 }
 
-void CALLBACK MyDispatchProcDLL(SIMCONNECT_RECV* pData, DWORD cbData, void* pContext)
+//-----------------------------------------------------------------------------
+
+} // namespace SimCache
+
+//-----------------------------------------------------------------------------
+
+GAUGESIMPORT ImportTable =
 {
-    switch (pData->dwID)
+    { 0x0000000F, (PPANELS)nullptr },
+    { 0x00000000, nullptr }
+};
+
+PPANELS Panels = nullptr; // filled in during the loading process if this DLL is listed in DLL.XML
+
+//-----------------------------------------------------------------------------
+
+void CALLBACK MyDispatchProcDLL(SIMCONNECT_RECV* data, DWORD callbackData, void* context)
+{
+    switch (data->dwID)
     {
     case SIMCONNECT_RECV_ID_OPEN:
     {
-        SimConnect_MapClientEventToSimEvent(hSimConnect, EVENT_PREV_SIMCACHE);
-        SimConnect_MapClientEventToSimEvent(hSimConnect, EVENT_NEXT_SIMCACHE);
-        SimConnect_MapClientEventToSimEvent(hSimConnect, EVENT_SIMCACHE_HINT);
+        SimConnect_MapClientEventToSimEvent(SimCache::g_simConnect, SimCache::EVENT_PREV_SIMCACHE);
+        SimConnect_MapClientEventToSimEvent(SimCache::g_simConnect, SimCache::EVENT_NEXT_SIMCACHE);
+        SimConnect_MapClientEventToSimEvent(SimCache::g_simConnect, SimCache::EVENT_SIMCACHE_HINT);
 
-        SimConnect_MapInputEventToClientEvent(hSimConnect, INPUT_SIMCACHE, "Ctrl+F5", EVENT_PREV_SIMCACHE);
-        SimConnect_MapInputEventToClientEvent(hSimConnect, INPUT_SIMCACHE, "Ctrl+F6", EVENT_SIMCACHE_HINT);
-        SimConnect_MapInputEventToClientEvent(hSimConnect, INPUT_SIMCACHE, "Ctrl+F7", EVENT_NEXT_SIMCACHE);
+        SimConnect_MapInputEventToClientEvent(SimCache::g_simConnect, SimCache::INPUT_SIMCACHE, "Ctrl+F5", SimCache::EVENT_PREV_SIMCACHE);
+        SimConnect_MapInputEventToClientEvent(SimCache::g_simConnect, SimCache::INPUT_SIMCACHE, "Ctrl+F6", SimCache::EVENT_SIMCACHE_HINT);
+        SimConnect_MapInputEventToClientEvent(SimCache::g_simConnect, SimCache::INPUT_SIMCACHE, "Ctrl+F7", SimCache::EVENT_NEXT_SIMCACHE);
         
-        SimConnect_SetInputGroupState(hSimConnect, INPUT_SIMCACHE, SIMCONNECT_STATE_OFF);
+        SimConnect_SetInputGroupState(SimCache::g_simConnect, SimCache::INPUT_SIMCACHE, SIMCONNECT_STATE_OFF);
 
-        SimConnect_AddClientEventToNotificationGroup(hSimConnect, GROUP_SIMCACHE, EVENT_PREV_SIMCACHE);
-        SimConnect_AddClientEventToNotificationGroup(hSimConnect, GROUP_SIMCACHE, EVENT_NEXT_SIMCACHE);
-        SimConnect_AddClientEventToNotificationGroup(hSimConnect, GROUP_SIMCACHE, EVENT_SIMCACHE_HINT);
+        SimConnect_AddClientEventToNotificationGroup(SimCache::g_simConnect, SimCache::GROUP_SIMCACHE, SimCache::EVENT_PREV_SIMCACHE);
+        SimConnect_AddClientEventToNotificationGroup(SimCache::g_simConnect, SimCache::GROUP_SIMCACHE, SimCache::EVENT_NEXT_SIMCACHE);
+        SimConnect_AddClientEventToNotificationGroup(SimCache::g_simConnect, SimCache::GROUP_SIMCACHE, SimCache::EVENT_SIMCACHE_HINT);
 
-        SimConnect_SubscribeToSystemEvent(hSimConnect, EVENT_SIM_START, "SimStart");
+        SimConnect_SubscribeToSystemEvent(SimCache::g_simConnect, SimCache::EVENT_SIM_START, "SimStart");
         break;
     }
     case SIMCONNECT_RECV_ID_EVENT:
     {
-        SIMCONNECT_RECV_EVENT *evt = (SIMCONNECT_RECV_EVENT*)pData;
+        SIMCONNECT_RECV_EVENT *evt = (SIMCONNECT_RECV_EVENT*)data;
 
         switch (evt->uEventID)
         {
-        case EVENT_SIM_START:
+        case SimCache::EVENT_SIM_START:
         {
-            SimConnect_SetInputGroupState(hSimConnect, INPUT_SIMCACHE, SIMCONNECT_STATE_ON);
+            SimConnect_SetInputGroupState(SimCache::g_simConnect, SimCache::INPUT_SIMCACHE, SIMCONNECT_STATE_ON);
             SimCache::Manager::Instance().DisplayCache(SimCache::Manager::Instance().CurrentCache());
             break;
         }
-        case EVENT_PREV_SIMCACHE:
+        case SimCache::EVENT_PREV_SIMCACHE:
         {
             SimCache::Manager::Instance().DisplayCache(SimCache::Manager::Instance().PreviousCache());
             break;
         }
-        case EVENT_NEXT_SIMCACHE:
+        case SimCache::EVENT_NEXT_SIMCACHE:
         {
             SimCache::Manager::Instance().DisplayCache(SimCache::Manager::Instance().NextCache());
             break;
         }
-        case EVENT_SIMCACHE_HINT:
+        case SimCache::EVENT_SIMCACHE_HINT:
         {
-            DisplayText(SIMCONNECT_TEXT_TYPE_PRINT_WHITE, 15.0f, SimCache::Manager::Instance().CurrentCache()->Hint());
+            SimCache::DisplayText(SIMCONNECT_TEXT_TYPE_PRINT_WHITE, 15.0f, SimCache::Manager::Instance().CurrentCache()->Hint());
             break;
         }
         }
@@ -147,7 +159,7 @@ void CALLBACK MyDispatchProcDLL(SIMCONNECT_RECV* pData, DWORD cbData, void* pCon
     }
     case SIMCONNECT_RECV_ID_ASSIGNED_OBJECT_ID:
     {
-        SimCache::Manager::Instance().OnRecvAssignedObjectId((SIMCONNECT_RECV_ASSIGNED_OBJECT_ID*)pData);
+        SimCache::Manager::Instance().OnRecvAssignedObjectId((SIMCONNECT_RECV_ASSIGNED_OBJECT_ID*)data);
         break;
     }
     default:
@@ -155,35 +167,42 @@ void CALLBACK MyDispatchProcDLL(SIMCONNECT_RECV* pData, DWORD cbData, void* pCon
     }
 }
 
+//-----------------------------------------------------------------------------
+
 void FSAPI module_init(void)
 {
-    if (NULL != Panels)
+    if (Panels != nullptr)
     {
         ImportTable.PANELSentry.fnptr = (PPANELS)Panels;
-        SIMCACHEPanelCallbackInit();
+        SimCache::PanelCallbackInit();
     }
 
-    auto hr = SimConnect_Open(&hSimConnect, "SimCache", NULL, 0, 0, 0);
+    HRESULT hr = SimConnect_Open(&SimCache::g_simConnect, "SimCache", nullptr, 0, 0, 0);
 
     if (hr == S_OK)
     {
-        SimCache::Manager::Instance().SetSimConnect(hSimConnect);
-        hr = SimConnect_CallDispatch(hSimConnect, MyDispatchProcDLL, NULL);
+        SimCache::Manager::Instance().SetSimConnect(SimCache::g_simConnect);
+        hr = SimConnect_CallDispatch(SimCache::g_simConnect, MyDispatchProcDLL, nullptr);
     }
 }
 
+//-----------------------------------------------------------------------------
+
 void FSAPI module_deinit(void)
 {
-    SIMCACHEPanelCallbackDeInit();
-    SimConnect_Close(hSimConnect);
+    SimCache::PanelCallbackDeInit();
+    SimConnect_Close(SimCache::g_simConnect);
 }
 
-BOOL WINAPI DllMain(HINSTANCE hDLL, DWORD dwReason, LPVOID lpReserved)
+//-----------------------------------------------------------------------------
+
+BOOL WINAPI DllMain(HINSTANCE dll, DWORD reason, LPVOID reserved)
 {
     return TRUE;
 }
 
-// This is the module's export table.
+//-----------------------------------------------------------------------------
+
 GAUGESLINKAGE Linkage =
 {
     0x00000013,
@@ -191,6 +210,8 @@ GAUGESLINKAGE Linkage =
     module_deinit,
     0,
     0,
-
-    FS9LINK_VERSION, { 0 }
+    FS9LINK_VERSION,
+    { 0 }
 };
+
+//-----------------------------------------------------------------------------

@@ -13,92 +13,45 @@
 
 #pragma once
 
-#include "gauges.h"
+#include <gauges.h>
 
 #include "CacheManager.h"
 
-//
-// Class that implements IGaugeCCallback
-//
-class SIMCACHEGaugeCallback : public IGaugeCCallback
+namespace SimCache
+{
+
+//-----------------------------------------------------------------------------
+
+class SimCacheGaugeCallback : public IGaugeCCallback
 {
 public:
-    SIMCACHEGaugeCallback(UINT32 containerId);
+    SimCacheGaugeCallback(UINT32 containerId);
 
     ULONG AddRef();
     ULONG Release();
 
-    // ************* IGaugeCCallback Methods ***************
-    IGaugeCCallback* QueryInterface(PCSTRINGZ pszInterface);
-    void Update();
-    bool GetPropertyValue(SINT32 id, FLOAT64* pValue);
-    bool GetPropertyValue(SINT32 id, PCSTRINGZ* pszValue);
+    IGaugeCCallback* QueryInterface(PCSTRINGZ object) { return nullptr; }
+    void Update(); // Called on a 18Hz cycle
+
+    bool GetPropertyValue(SINT32 id, FLOAT64* value);
+    bool GetPropertyValue(SINT32 id, PCSTRINGZ* value);
     bool SetPropertyValue(SINT32 id, FLOAT64 value);
-    bool SetPropertyValue(SINT32 id, PCSTRINGZ szValue);
-    IGaugeCDrawable* CreateGaugeCDrawable(SINT32 id, const IGaugeCDrawableCreateParameters* pParameters);
+    bool SetPropertyValue(SINT32 id, PCSTRINGZ value);
 
-    double getSimCacheDistance() const
-    {
-        return m_distanceToSimCache;
-    }
+    IGaugeCDrawable* CreateGaugeCDrawable(SINT32 id, const IGaugeCDrawableCreateParameters* parameters);
 
-    const char* getSimCacheName() const
-    {
-        return SimCache::Manager::Instance().CurrentCache()->Name().c_str();
-    }
+    double GetSimCacheDistance() const;
+    const char* GetSimCacheName() const;
+    const char* GetSimCacheHint() const;
+    const char* GetSimCacheStatus() const;
 
-    const char* getSimCacheHint() const
-    {
-        return SimCache::Manager::Instance().CurrentCache()->Hint().c_str();
-    }
+    double GetSimCacheIndex() const;
+    void SetSimCacheIndex(double value);
 
-    const char* getSimCacheStatus() const
-    {
-        if (m_distanceToSimCache < 1852 * 2)
-        {
-            return "Less than 2 nm away";
-        }
-        else if (m_distanceToSimCache < 1852 * 5)
-        {
-            return "Less than 5 nm away";
-        }
-        else if (m_distanceToSimCache < 1852 * 10)
-        {
-            return "Less than 10 nm away";
-        }
-        else if (m_distanceToSimCache < 1852 * 25)
-        {
-            return "Less than 25 nm away";
-        }
-        else if (m_distanceToSimCache < 1852 * 50)
-        {
-            return "Less than 50 nm away";
-        }
-        return "Greater than 50 nm away";
-    }
-
-    double getSimCacheIndex() const
-    {
-        return m_simCacheIndex;
-    }
-
-    void setSimCacheIndex(double value)
-    {
-        if (value > m_simCacheIndex)
-        {
-            SimCache::Manager::Instance().DisplayCache(SimCache::Manager::Instance().NextCache());
-        }
-        else
-        {
-            SimCache::Manager::Instance().DisplayCache(SimCache::Manager::Instance().PreviousCache());
-        }
-        m_simCacheIndex = value;
-    }
 private:
-    ULONG m_RefCount;
+    ULONG m_refCount;
     UINT32 m_containerId;
 
-    // Declare member variables representing SIMCACHE state    
     double m_distanceToSimCache;
     double m_simCacheIndex;
 
@@ -108,3 +61,7 @@ private:
     ENUM m_aircraftVarLongitude;
     ENUM m_aircraftVarAltitude;
 };
+
+//-----------------------------------------------------------------------------
+
+} // namespace SimCache

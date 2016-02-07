@@ -13,8 +13,12 @@
 
 #include "SimCacheGaugeCallback.h"
 
-// Enum that contains the properties 
-enum SIMCACHE_VAR
+namespace SimCache
+{
+
+//-----------------------------------------------------------------------------
+
+enum SimCacheVar
 {
     SIMCACHE_VAR_DISTANCE,
     SIMCACHE_VAR_NAME,
@@ -23,21 +27,10 @@ enum SIMCACHE_VAR
     SIMCACHE_VAR_INDEX,
 };
 
-ULONG SIMCACHEGaugeCallback::AddRef()
-{
-    return ++m_RefCount;
-}
+//-----------------------------------------------------------------------------
 
-ULONG SIMCACHEGaugeCallback::Release()
-{
-    ULONG result = --m_RefCount;
-    if (result < 1)
-        delete this;
-    return result;
-}
-
-SIMCACHEGaugeCallback::SIMCACHEGaugeCallback(UINT32 containerId)
-    : m_RefCount(1),
+SimCacheGaugeCallback::SimCacheGaugeCallback(UINT32 containerId) :
+    m_refCount(1),
     m_containerId(containerId),
     m_distanceToSimCache(1.0),
     m_simCacheIndex(0.0),
@@ -46,17 +39,30 @@ SIMCACHEGaugeCallback::SIMCACHEGaugeCallback(UINT32 containerId)
     m_aircraftVarLatitude(get_aircraft_var_enum("PLANE LATITUDE")),
     m_aircraftVarLongitude(get_aircraft_var_enum("PLANE LONGITUDE")),
     m_aircraftVarAltitude(get_aircraft_var_enum("PLANE ALTITUDE"))
-{ }
+{}
 
-IGaugeCCallback* SIMCACHEGaugeCallback::QueryInterface(PCSTRINGZ pszInterface)
+//-----------------------------------------------------------------------------
+
+ULONG SimCacheGaugeCallback::AddRef()
 {
-    return NULL;
+    return ++m_refCount;
 }
 
-//
-// The Update functions is called on a 18Hz cycle
-//
-void SIMCACHEGaugeCallback::Update()
+//-----------------------------------------------------------------------------
+
+ULONG SimCacheGaugeCallback::Release()
+{
+    ULONG result = --m_refCount;
+    if (result < 1)
+    {
+        delete this;
+    }
+    return result;
+}
+
+//-----------------------------------------------------------------------------
+
+void SimCacheGaugeCallback::Update()
 {
     FLOAT64 currentLat = aircraft_varget(m_aircraftVarLatitude, m_unitsRadians, 0);
     FLOAT64 currentLon = aircraft_varget(m_aircraftVarLongitude, m_unitsRadians, 0);
@@ -65,26 +71,25 @@ void SIMCACHEGaugeCallback::Update()
     m_distanceToSimCache = SimCache::Manager::Instance().CurrentCache()->Distance(Transformations::FromEllipsoidal(currentLat, currentLon, currentAlt));
 }
 
-//
-// Getting float/numeric values
-//
-bool SIMCACHEGaugeCallback::GetPropertyValue(SINT32 id, FLOAT64* pValue)
+//-----------------------------------------------------------------------------
+
+bool SimCacheGaugeCallback::GetPropertyValue(SINT32 id, FLOAT64* value)
 {
-    if (!pValue)
+    if (!value)
     {
         return false;
     }
 
-    *pValue = 1.0;      // Start with a reasonable default
-    SIMCACHE_VAR eSIMCACHEVar = (SIMCACHE_VAR)id;
+    *value = 1.0;
+    SimCacheVar var = static_cast<SimCacheVar>(id);
 
-    switch (eSIMCACHEVar)
+    switch (var)
     {
     case SIMCACHE_VAR_DISTANCE:
-        *pValue = getSimCacheDistance();
+        *value = GetSimCacheDistance();
         break;
     case SIMCACHE_VAR_INDEX:
-        *pValue = getSimCacheIndex();
+        *value = GetSimCacheIndex();
         break;
     default:
         return false;
@@ -92,29 +97,28 @@ bool SIMCACHEGaugeCallback::GetPropertyValue(SINT32 id, FLOAT64* pValue)
     return true;
 }
 
-//
-// Getting string property values
-//
-bool SIMCACHEGaugeCallback::GetPropertyValue(SINT32 id, PCSTRINGZ* pszValue)
+//-----------------------------------------------------------------------------
+
+bool SimCacheGaugeCallback::GetPropertyValue(SINT32 id, PCSTRINGZ* value)
 {
-    if (!pszValue)
+    if (!value)
     {
         return false;
     }
 
-    *pszValue = "null";     // Return a reasonable default 
-    SIMCACHE_VAR eSIMCACHEVar = (SIMCACHE_VAR)id;
+    *value = "null";
+    SimCacheVar var = static_cast<SimCacheVar>(id);
 
-    switch (eSIMCACHEVar)
+    switch (var)
     {
     case SIMCACHE_VAR_NAME:
-        *pszValue = getSimCacheName();
+        *value = GetSimCacheName();
         break;
     case SIMCACHE_VAR_HINT:
-        *pszValue = getSimCacheHint();
+        *value = GetSimCacheHint();
         break;
     case SIMCACHE_VAR_STATUS:
-        *pszValue = getSimCacheStatus();
+        *value = GetSimCacheStatus();
         break;
     default:
         return false;
@@ -122,17 +126,16 @@ bool SIMCACHEGaugeCallback::GetPropertyValue(SINT32 id, PCSTRINGZ* pszValue)
     return true;
 }
 
-//
-// Setting float/numeric values
-//
-bool SIMCACHEGaugeCallback::SetPropertyValue(SINT32 id, FLOAT64 value)
-{
-    SIMCACHE_VAR eSIMCACHEVar = (SIMCACHE_VAR)id;
+//-----------------------------------------------------------------------------
 
-    switch (eSIMCACHEVar)
+bool SimCacheGaugeCallback::SetPropertyValue(SINT32 id, FLOAT64 value)
+{
+    SimCacheVar var = static_cast<SimCacheVar>(id);
+
+    switch (var)
     {
     case SIMCACHE_VAR_INDEX:
-        setSimCacheIndex(value);
+        SetSimCacheIndex(value);
         break;
     default:
         return false;
@@ -140,15 +143,90 @@ bool SIMCACHEGaugeCallback::SetPropertyValue(SINT32 id, FLOAT64 value)
     return true;
 }
 
-//
-// Setting string values
-//
-bool SIMCACHEGaugeCallback::SetPropertyValue(SINT32 id, PCSTRINGZ szValue)
+//-----------------------------------------------------------------------------
+
+bool SimCacheGaugeCallback::SetPropertyValue(SINT32 id, PCSTRINGZ value)
 {
     return false;
 }
 
-IGaugeCDrawable* SIMCACHEGaugeCallback::CreateGaugeCDrawable(SINT32 id, const IGaugeCDrawableCreateParameters* pParameters)
+//-----------------------------------------------------------------------------
+
+IGaugeCDrawable* SimCacheGaugeCallback::CreateGaugeCDrawable(SINT32 id, const IGaugeCDrawableCreateParameters* parameters)
 {
-    return NULL;
+    return nullptr;
 }
+
+//-----------------------------------------------------------------------------
+
+double SimCacheGaugeCallback::GetSimCacheDistance() const
+{
+    return m_distanceToSimCache;
+}
+
+//-----------------------------------------------------------------------------
+
+const char* SimCacheGaugeCallback::GetSimCacheName() const
+{
+    return SimCache::Manager::Instance().CurrentCache()->Name().c_str();
+}
+
+//-----------------------------------------------------------------------------
+
+const char* SimCacheGaugeCallback::GetSimCacheHint() const
+{
+    return SimCache::Manager::Instance().CurrentCache()->Hint().c_str();
+}
+
+//-----------------------------------------------------------------------------
+
+const char* SimCacheGaugeCallback::GetSimCacheStatus() const
+{
+    if (m_distanceToSimCache < 1852 * 2)
+    {
+        return "Less than 2 nm away";
+    }
+    else if (m_distanceToSimCache < 1852 * 5)
+    {
+        return "Less than 5 nm away";
+    }
+    else if (m_distanceToSimCache < 1852 * 10)
+    {
+        return "Less than 10 nm away";
+    }
+    else if (m_distanceToSimCache < 1852 * 25)
+    {
+        return "Less than 25 nm away";
+    }
+    else if (m_distanceToSimCache < 1852 * 50)
+    {
+        return "Less than 50 nm away";
+    }
+    return "Greater than 50 nm away";
+}
+
+//-----------------------------------------------------------------------------
+
+double SimCacheGaugeCallback::GetSimCacheIndex() const
+{
+    return m_simCacheIndex;
+}
+
+//-----------------------------------------------------------------------------
+
+void SimCacheGaugeCallback::SetSimCacheIndex(double value)
+{
+    if (value > m_simCacheIndex)
+    {
+        SimCache::Manager::Instance().DisplayCache(SimCache::Manager::Instance().NextCache());
+    }
+    else
+    {
+        SimCache::Manager::Instance().DisplayCache(SimCache::Manager::Instance().PreviousCache());
+    }
+    m_simCacheIndex = value;
+}
+
+//-----------------------------------------------------------------------------
+
+} // namespace SimCache

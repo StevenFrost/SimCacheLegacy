@@ -13,20 +13,29 @@
 
 #pragma once
 
-#include "gauges.h"
+#include <gauges.h>
 
-//
-// AircraftCallback Override
-//
-class SIMCACHEAircraftCallback : public AircraftCallback
+#include "AircraftCallback.h"
+#include "SimCacheGaugeCallback.h"
+
+namespace SimCache
 {
-private:
 
+//-----------------------------------------------------------------------------
+
+class SimCacheAircraftCallback : public AircraftCallback
+{
 public:
-    SIMCACHEAircraftCallback(UINT32 ContainerID) : AircraftCallback(ContainerID)
+    SimCacheAircraftCallback(UINT32 containerID) :
+        AircraftCallback(containerID)
     {}
+
     IGaugeCCallback* CreateGaugeCCallback()
     {
-        return new SIMCACHEGaugeCallback(GetContainerId());
+        return new SimCacheGaugeCallback(GetContainerId());
     }
 };
+
+//-----------------------------------------------------------------------------
+
+} // namespace SimCache

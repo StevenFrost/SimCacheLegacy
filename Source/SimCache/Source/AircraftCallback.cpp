@@ -13,33 +13,42 @@
 
 #include "AircraftCallback.h"
 
-ULONG AircraftCallback::AddRef()
+namespace SimCache
 {
-    return ++m_refCount;
-}
-ULONG AircraftCallback::Release()
-{
-    ULONG result = --m_refCount;
-    if (result < 1)
-        delete this;
-    return result;
-}
+
+//-----------------------------------------------------------------------------
 
 AircraftCallback::AircraftCallback(UINT32 containerId)
     : m_containerId(containerId),
     m_refCount(1)
 {}
 
-IAircraftCCallback* AircraftCallback::QueryInterface(PCSTRINGZ pszInterface)
+//-----------------------------------------------------------------------------
+
+ULONG AircraftCallback::AddRef()
 {
-    return NULL;
+    return ++m_refCount;
 }
 
-void AircraftCallback::Update()
+//-----------------------------------------------------------------------------
+
+ULONG AircraftCallback::Release()
 {
+    ULONG result = --m_refCount;
+    if (result < 1)
+    {
+        delete this;
+    }
+    return result;
 }
+
+//-----------------------------------------------------------------------------
 
 UINT32 AircraftCallback::GetContainerId() const
 {
     return m_containerId;
 }
+
+//-----------------------------------------------------------------------------
+
+} // namespace SimCache

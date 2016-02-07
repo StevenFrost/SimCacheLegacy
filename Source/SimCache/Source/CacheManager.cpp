@@ -16,34 +16,44 @@
 namespace SimCache
 {
 
-void Manager::SetSimConnect(HANDLE hSimConnect)
+//-----------------------------------------------------------------------------
+
+void Manager::SetSimConnect(HANDLE simConnect)
 {
-    m_hSimConnect = hSimConnect;
+    m_simConnect = simConnect;
 }
 
-void Manager::OnRecvAssignedObjectId(SIMCONNECT_RECV_ASSIGNED_OBJECT_ID * pObjData)
+//-----------------------------------------------------------------------------
+
+void Manager::OnRecvAssignedObjectId(SIMCONNECT_RECV_ASSIGNED_OBJECT_ID * objData)
 {
-    switch (pObjData->dwRequestID)
+    switch (objData->dwRequestID)
     {
     case REQUEST_CREATE_SIMCACHE:
-        m_currentCacheId = pObjData->dwObjectID;
+        m_currentCacheId = objData->dwObjectID;
         break;
     }
 }
+
+//-----------------------------------------------------------------------------
 
 void Manager::DisplayCache(ICache::Ptr const & cacheToDisplay)
 {
     if (m_currentCacheId != 0UL)
     {
-        SimConnect_AIRemoveObject(m_hSimConnect, m_currentCacheId, REQUEST_REMOVE_SIMCACHE);
+        SimConnect_AIRemoveObject(m_simConnect, m_currentCacheId, REQUEST_REMOVE_SIMCACHE);
     }
-    SimConnect_AICreateSimulatedObject(m_hSimConnect, "SimCache", cacheToDisplay->InitPosition(), REQUEST_CREATE_SIMCACHE);
+    SimConnect_AICreateSimulatedObject(m_simConnect, "SimCache", cacheToDisplay->InitPosition(), REQUEST_CREATE_SIMCACHE);
 }
+
+//-----------------------------------------------------------------------------
 
 void Manager::AddCache(ICache::Ptr const& cacheToAdd)
 {
     m_caches.push_back(ICache::Ptr(cacheToAdd));
 }
+
+//-----------------------------------------------------------------------------
 
 ICache::Ptr Manager::NextCache()
 {
@@ -58,6 +68,8 @@ ICache::Ptr Manager::NextCache()
     return *m_currentCache;
 }
 
+//-----------------------------------------------------------------------------
+
 ICache::Ptr Manager::PreviousCache()
 {
     if (m_currentCache != m_caches.begin())
@@ -71,4 +83,17 @@ ICache::Ptr Manager::PreviousCache()
     return *m_currentCache;
 }
 
+//-----------------------------------------------------------------------------
+
+ICache::Ptr Manager::CurrentCache() const
+{
+    if (m_currentCache == m_caches.end())
+    {
+        return nullptr;
+    }
+    return *m_currentCache;
 }
+
+//-----------------------------------------------------------------------------
+
+} // namespace SimCache

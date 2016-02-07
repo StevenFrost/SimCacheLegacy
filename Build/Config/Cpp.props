@@ -39,7 +39,6 @@
       <PreprocessorDefinitions Condition="'$(Configuration)' != 'Debug'">NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(ConfigurationType)' == 'StaticLibrary'">_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 
-      <PreprocessorDefinitions Condition="'$(Platform)' == 'x64'">WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Platform)' == 'Win32'">WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
 
       <WarningLevel>Level4</WarningLevel>
@@ -60,6 +59,9 @@
 
       <!-- Disable 'conversion from 'int' to 'DWORD', signed/unsigned mismatch' warning (C4245) -->
       <DisableSpecificWarnings>4245;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+
+      <!-- Disable 'warning C4005: 'XXX': macro redefinition' warning (C4005) -->
+      <DisableSpecificWarnings>4005;%(DisableSpecificWarnings)</DisableSpecificWarnings>
 
       <SDLCheck>true</SDLCheck>
       <TreatWarningAsError>true</TreatWarningAsError>

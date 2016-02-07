@@ -15,8 +15,11 @@
 
 #include <gauges.h>
 
-// AircraftCallback is an abstract base class that can be overrided.  Implementors
-// should override the function CreateGaugeCCallback(UINT32 ContainerId)
+namespace SimCache
+{
+
+//-----------------------------------------------------------------------------
+
 class AircraftCallback : public IAircraftCCallback
 {
 public:
@@ -26,8 +29,8 @@ public:
     virtual ULONG AddRef();
     virtual ULONG Release();
 
-    virtual IAircraftCCallback* QueryInterface(PCSTRINGZ pszInterface);
-    virtual void Update();
+    virtual IAircraftCCallback* QueryInterface(PCSTRINGZ) { return nullptr; }
+    virtual void Update() {}
 
 protected:
     UINT32 GetContainerId() const;
@@ -36,3 +39,7 @@ private:
     ULONG  m_refCount;
     UINT32 m_containerId;
 };
+
+//-----------------------------------------------------------------------------
+
+} // namespace SimCache

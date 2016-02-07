@@ -15,6 +15,11 @@
 
 #include <memory>
 
+namespace SimCache
+{
+
+//-----------------------------------------------------------------------------
+
 class VectorR3
 {
 public:
@@ -37,3 +42,7 @@ public:
     friend VectorR3 operator -(VectorR3 u, VectorR3 v);
     friend VectorR3 operator *(VectorR3 u, double c);
 };
+
+//-----------------------------------------------------------------------------
+
+} // namespace SimCache

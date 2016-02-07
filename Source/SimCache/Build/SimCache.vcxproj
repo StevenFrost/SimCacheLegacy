@@ -18,6 +18,11 @@
         $(SourceDirectory)SimConnect\Inc;
         %(AdditionalIncludeDirectories)
       </AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>
+        WIN32_LEAN_AND_MEAN;
+        _USE_MATH_DEFINES;
+        %(PreprocessorDefinitions)
+      </PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <ModuleDefinitionFile>SimCache_Def.def</ModuleDefinitionFile>

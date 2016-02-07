@@ -13,91 +13,109 @@
 
 #include "PanelCallback.h"
 
+namespace SimCache
+{
+
+//-----------------------------------------------------------------------------
+
+PanelCallback::PanelCallback()
+    : m_refCount(1)
+{}
+
+//-----------------------------------------------------------------------------
+
 ULONG PanelCallback::AddRef()
 {
-    return ++m_RefCount;
+    return ++m_refCount;
 }
+
+//-----------------------------------------------------------------------------
 
 ULONG PanelCallback::Release()
 {
-    ULONG result = --m_RefCount;
+    ULONG result = --m_refCount;
     if (result < 1)
+    {
         delete this;
+    }
     return result;
 }
 
-PanelCallback::PanelCallback()
-    : m_RefCount(1)
-{}
-
-IPanelCCallback* PanelCallback::QueryInterface(PCSTRINGZ pszInterface)
-{
-    return NULL;
-}
+//-----------------------------------------------------------------------------
 
 UINT32 PanelCallback::GetVersion()
 {
     return 1;
 }
 
-bool PanelCallback::ConvertStringToProperty(PCSTRINGZ keyword, SINT32* pID)
+//-----------------------------------------------------------------------------
+
+bool PanelCallback::ConvertStringToProperty(PCSTRINGZ keyword, SINT32* id)
 {
     if (!keyword)
     {
         return false;
     }
-    if (!pID)
+    if (!id)
     {
         return false;
     }
 
-    UINT uNumProperties;
-    const PROPERTY_TABLE *parPropertyTable = GetPropertyTable(uNumProperties);
+    UINT numProperties;
+    const PropertyTableRow *parPropertyTable = GetPropertyTable(numProperties);
 
-    for (UINT i = 0; i < uNumProperties; i++)
+    for (UINT i = 0; i < numProperties; i++)
     {
-        if (_stricmp(parPropertyTable[i].szPropertyName, keyword) == 0)
+        if (_stricmp(parPropertyTable[i].PropertyName, keyword) == 0)
         {
-            *pID = i;
+            *id = i;
             return true;
         }
     }
     return false;
 }
 
-bool PanelCallback::ConvertPropertyToString(SINT32 id, PPCSTRINGZ pKeyword)
+//-----------------------------------------------------------------------------
+
+bool PanelCallback::ConvertPropertyToString(SINT32 id, PPCSTRINGZ keyword)
 {
-    if (!pKeyword)
+    if (!keyword)
     {
         return false;
     }
 
-    UINT uNumProperties;
-    const PROPERTY_TABLE *parPropertyTable = GetPropertyTable(uNumProperties);
+    UINT numProperties;
+    const PropertyTableRow *parPropertyTable = GetPropertyTable(numProperties);
 
-    if (id < 0 || id >= (SINT32)uNumProperties)
+    if (id < 0 || id >= (SINT32)numProperties)
     {
         return false;
     }
-    *pKeyword = parPropertyTable[id].szPropertyName;
+    *keyword = parPropertyTable[id].PropertyName;
     return true;
 }
 
-bool PanelCallback::GetPropertyUnits(SINT32 id, ENUM* pEnum)
+//-----------------------------------------------------------------------------
+
+bool PanelCallback::GetPropertyUnits(SINT32 id, ENUM* units)
 {
-    if (!pEnum)
+    if (!units)
     {
         return false;
     }
 
-    UINT uNumProperties;
-    const PROPERTY_TABLE *parPropertyTable = GetPropertyTable(uNumProperties);
+    UINT numProperties;
+    const PropertyTableRow *parPropertyTable = GetPropertyTable(numProperties);
 
-    if (id < 0 || id >= (SINT32)uNumProperties)
+    if (id < 0 || id >= (SINT32)numProperties)
     {
         return false;
     }
 
-    *pEnum = parPropertyTable[id].units;
+    *units = parPropertyTable[id].Units;
     return true;
 }
+
+//-----------------------------------------------------------------------------
+
+} // namespace SimCache
