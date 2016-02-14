@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimCache", "..\Source\SimCache\Build\SimCache.vcxproj", "{DA59AEBD-2791-4C6F-A9B1-ED665C652F4A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CacheManager", "..\Source\CacheManager\Build\CacheManager.vcxproj", "{26FC2445-4C05-4808-9F1E-E0BA6017636C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{DA59AEBD-2791-4C6F-A9B1-ED665C652F4A}.Debug|Win32.Build.0 = Debug|Win32
 		{DA59AEBD-2791-4C6F-A9B1-ED665C652F4A}.Release|Win32.ActiveCfg = Release|Win32
 		{DA59AEBD-2791-4C6F-A9B1-ED665C652F4A}.Release|Win32.Build.0 = Release|Win32
+		{26FC2445-4C05-4808-9F1E-E0BA6017636C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{26FC2445-4C05-4808-9F1E-E0BA6017636C}.Debug|Win32.Build.0 = Debug|Win32
+		{26FC2445-4C05-4808-9F1E-E0BA6017636C}.Release|Win32.ActiveCfg = Release|Win32
+		{26FC2445-4C05-4808-9F1E-E0BA6017636C}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

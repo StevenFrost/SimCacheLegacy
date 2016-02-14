@@ -11,29 +11,47 @@
 *                                                                                *
 **********************************************************************************/
 
-#pragma once
+#include <CacheManager/VectorR3.h>
 
-#include "VectorR3.h"
+#include <cmath>
 
 namespace SimCache
 {
-namespace Transformations
+
+//-----------------------------------------------------------------------------
+
+double VectorR3::Norm()
 {
+    return sqrt((X * X) + (Y * Y) + (Z * Z));
+}
+
+double VectorR3::NormSquared()
+{
+    return (X * X) + (Y * Y) + (Z * Z);
+}
+
+VectorR3 VectorR3::CrossProduct(VectorR3 rhs)
+{
+    return VectorR3((Y * rhs.Z) - (Z * rhs.Y), -((X * rhs.Z) - (Z * rhs.X)), (X * rhs.Y) - (Y * rhs.X));
+}
+
+double VectorR3::DotProduct(VectorR3 rhs)
+{
+    return (X * rhs.X) + (Y * rhs.Y) + (Z * rhs.Z);
+}
+
+VectorR3 operator +(VectorR3 u, VectorR3 v) {
+    return VectorR3(u.X + v.X, u.Y + v.Y, u.Z + v.Z);
+}
+
+VectorR3 operator -(VectorR3 u, VectorR3 v) {
+    return VectorR3(u.X - v.X, u.Y - v.Y, u.Z - v.Z);
+}
+
+VectorR3 operator *(VectorR3 u, double c) {
+    return VectorR3(u.X * c, u.Y * c, u.Z * c);
+}
 
 //-----------------------------------------------------------------------------
 
-// WGS84 constants
-const double a = 6378137.0; // semi-major axis (a)
-const double f = 1.0 / 298.257223563; // flattening (f)
-const double b = a * (1.0 - f); // semi-minor axis (b) (6356752.3142 meters)
-const double eSquared = 2.0 * f - (f * f); // first eccentricity squared (e^2) (6.69437999014 x 10-3)
-const double ePrimeSquared = (a * a) / (b * b) - 1.0; // second eccentricity squared (e'^2) (6.73949674228 x 10-3)
-
-//-----------------------------------------------------------------------------
-
-VectorR3 FromEllipsoidal(double phi, double lambda, double h);
-
-//-----------------------------------------------------------------------------
-
-} // namespace Transformations
 } // namespace SimCache

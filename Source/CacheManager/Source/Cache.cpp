@@ -11,7 +11,8 @@
 *                                                                                *
 **********************************************************************************/
 
-#include "Cache.h"
+#include <CacheManager/Cache.h>
+
 #include "Conversions.h"
 
 namespace SimCache
@@ -26,10 +27,10 @@ public:
     CacheImpl(std::string const& name, std::string const& hint, double latitude, double longitude, double altitude, double alertDistance, double acquireDistance);
     ~CacheImpl() {};
 
-    virtual std::string const& Name() const;
-    virtual std::string const& Hint() const;
-    virtual SIMCONNECT_DATA_INITPOSITION InitPosition() const;
-    virtual double Distance(VectorR3 position) const;
+    virtual std::string const& GetName() const;
+    virtual std::string const& GetHint() const;
+    virtual CachePosition GetPosition() const;
+    virtual double GetDistance(VectorR3 position) const;
 
 private:
     std::string m_name;
@@ -65,6 +66,8 @@ CacheImpl::CacheImpl(std::string const& name, double latitude, double longitude,
     m_acquireDistanceMeters(50.0)
 {}
 
+//-----------------------------------------------------------------------------
+
 CacheImpl::CacheImpl(std::string const& name, std::string const& hint, double latitude, double longitude, double altitude, double alertDistance, double acquireDistance)
     :
     m_name(name),
@@ -80,43 +83,63 @@ CacheImpl::CacheImpl(std::string const& name, std::string const& hint, double la
     m_acquireDistanceMeters(acquireDistance)
 {}
 
-std::string const& CacheImpl::Name() const
+//-----------------------------------------------------------------------------
+
+std::string const& CacheImpl::GetName() const
 {
     return m_name;
 }
 
-std::string const& CacheImpl::Hint() const
+//-----------------------------------------------------------------------------
+
+std::string const& CacheImpl::GetHint() const
 {
     return m_hint;
 }
 
-SIMCONNECT_DATA_INITPOSITION CacheImpl::InitPosition() const
+//-----------------------------------------------------------------------------
+
+CachePosition CacheImpl::GetPosition() const
 {
-    SIMCONNECT_DATA_INITPOSITION InitPos;
-    InitPos.Latitude = m_latitudeDegrees;
-    InitPos.Longitude = m_longitudeDegrees;
-    InitPos.Altitude = m_altitudeFeet;
-    InitPos.Pitch = m_pitchDegrees;
-    InitPos.Bank = m_bankDegrees;
-    InitPos.Heading = m_headingDegrees;
-    InitPos.OnGround = 0;
-    InitPos.Airspeed = 0;
-    return InitPos;
+    return CachePosition
+    {
+        m_latitudeDegrees,
+        m_longitudeDegrees,
+        m_altitudeFeet,
+        m_pitchDegrees,
+        m_bankDegrees,
+        m_headingDegrees
+    };
 }
 
-double CacheImpl::Distance(VectorR3 position) const
+//-----------------------------------------------------------------------------
+
+double CacheImpl::GetDistance(VectorR3 position) const
 {
     return (m_positionCartesian - position).Norm();
 }
 
 //-----------------------------------------------------------------------------
 
-ICache::Ptr Factory::Make(std::string const& name, double latitude, double longitude, double altitude)
+ICache::Ptr Factory::Make(
+    std::string const& name,
+    double latitude,
+    double longitude,
+    double altitude)
 {
     return std::make_shared<CacheImpl>(name, "No hint given.", latitude, longitude, altitude, 1000.0, 50.0);
 }
 
-ICache::Ptr Factory::Make(std::string const& name, std::string const& hint, double latitude, double longitude, double altitude, double alertDistance, double acquireDistance)
+//-----------------------------------------------------------------------------
+
+ICache::Ptr Factory::Make(
+    std::string const& name,
+    std::string const& hint,
+    double latitude,
+    double longitude,
+    double altitude,
+    double alertDistance,
+    double acquireDistance)
 {
     return std::make_shared<CacheImpl>(name, hint, latitude, longitude, altitude, alertDistance, acquireDistance);
 }

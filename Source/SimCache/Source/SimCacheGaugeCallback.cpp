@@ -68,7 +68,7 @@ void SimCacheGaugeCallback::Update()
     FLOAT64 currentLon = aircraft_varget(m_aircraftVarLongitude, m_unitsRadians, 0);
     FLOAT64 currentAlt = aircraft_varget(m_aircraftVarAltitude, m_unitsMeters, 0);
 
-    m_distanceToSimCache = SimCache::Manager::Instance().CurrentCache()->Distance(Transformations::FromEllipsoidal(currentLat, currentLon, currentAlt));
+    m_distanceToSimCache = SimCache::CacheManager::Instance().CurrentCache()->GetDistance(Transformations::FromEllipsoidal(currentLat, currentLon, currentAlt));
 }
 
 //-----------------------------------------------------------------------------
@@ -168,14 +168,14 @@ double SimCacheGaugeCallback::GetSimCacheDistance() const
 
 const char* SimCacheGaugeCallback::GetSimCacheName() const
 {
-    return SimCache::Manager::Instance().CurrentCache()->Name().c_str();
+    return SimCache::CacheManager::Instance().CurrentCache()->GetName().c_str();
 }
 
 //-----------------------------------------------------------------------------
 
 const char* SimCacheGaugeCallback::GetSimCacheHint() const
 {
-    return SimCache::Manager::Instance().CurrentCache()->Hint().c_str();
+    return SimCache::CacheManager::Instance().CurrentCache()->GetHint().c_str();
 }
 
 //-----------------------------------------------------------------------------
@@ -218,11 +218,11 @@ void SimCacheGaugeCallback::SetSimCacheIndex(double value)
 {
     if (value > m_simCacheIndex)
     {
-        SimCache::Manager::Instance().DisplayCache(SimCache::Manager::Instance().NextCache());
+        SimCache::CacheManager::Instance().NextCache();
     }
     else
     {
-        SimCache::Manager::Instance().DisplayCache(SimCache::Manager::Instance().PreviousCache());
+        SimCache::CacheManager::Instance().PreviousCache();
     }
     m_simCacheIndex = value;
 }
