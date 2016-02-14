@@ -13,43 +13,30 @@
 
 #pragma once
 
+#include <functional>
 #include <memory>
 #include <vector>
-#include <windows.h>
 
-#include <SimConnect.h>
-
-#include "Cache.h"
+#include <CacheManager/Cache.h>
 
 namespace SimCache
 {
 
 //-----------------------------------------------------------------------------
 
-enum DataRequestID
-{
-    REQUEST_CREATE_SIMCACHE,
-    REQUEST_REMOVE_SIMCACHE
-};
-
-//-----------------------------------------------------------------------------
-
-class Manager
+class CacheManager
 {
 public:
-    static Manager& Instance()
+    static CacheManager& Instance()
     {
-        static Manager instance;
+        static CacheManager instance;
         return instance;
     }
 
-    Manager(Manager const&) = delete;
-    void operator=(Manager const&) = delete;
+    CacheManager(CacheManager const&) = delete;
+    void operator=(CacheManager const&) = delete;
 
-    void SetSimConnect(HANDLE simConnect);
-    void OnRecvAssignedObjectId(SIMCONNECT_RECV_ASSIGNED_OBJECT_ID *objData);
-    void DisplayCache(ICache::Ptr const& cacheToDisplay);
-
+    void SetOnCacheChanged(std::function<void(ICache::Ptr const&)> const& f);
     void AddCache(ICache::Ptr const& cacheToAdd);
 
     ICache::Ptr NextCache();
@@ -57,8 +44,8 @@ public:
     ICache::Ptr CurrentCache() const;
 
 private:
-    Manager() :
-        m_simConnect(nullptr),
+    CacheManager() :
+        m_onCacheChanged(nullptr),
         m_currentCacheId(0UL)
     {
         AddCache(Factory::Make("Friday Harbor Airport", "This airport is the starting point for the Flight Simulator X default flight.", 48.5219722, -123.0243611, 112.7, 1000.0, 50.0));
@@ -69,10 +56,14 @@ private:
         m_currentCache = m_caches.begin();
     };
 
+    void OnCacheChanged();
+
+private:
+    std::shared_ptr<std::function<void(ICache::Ptr const&)>> m_onCacheChanged;
+
     std::vector<ICache::Ptr> m_caches;
     std::vector<ICache::Ptr>::iterator m_currentCache;
 
-    HANDLE m_simConnect;
     unsigned long m_currentCacheId;
 };
 

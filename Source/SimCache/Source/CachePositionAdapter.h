@@ -11,23 +11,33 @@
 *                                                                                *
 **********************************************************************************/
 
-#include "Transformations.h"
+#pragma once
 
-#include <cmath>
+#include <Windows.h>
+
+#include <CacheManager/Cache.h>
+#include <SimConnect.h>
 
 namespace SimCache
 {
 
 //-----------------------------------------------------------------------------
 
-VectorR3 Transformations::FromEllipsoidal(double phi, double lambda, double h)
+class CachePositionAdapter : public SIMCONNECT_DATA_INITPOSITION
 {
-    auto N = a / sqrt(1.0 - (eSquared * pow(sin(phi), 2.0)));
-    auto x = (N + h) * cos(phi) * cos(lambda);
-    auto y = (N + h) * cos(phi) * sin(lambda);
-    auto z = ((1.0 - eSquared) * N + h) * sin(phi);
-    return VectorR3(x, y, z);
-}
+public:
+    CachePositionAdapter(CachePosition const& cachePosition)
+    {
+        Latitude = cachePosition.Latitude;
+        Longitude = cachePosition.Longitude;
+        Altitude = cachePosition.Altitude;
+        Pitch = cachePosition.Pitch;
+        Bank = cachePosition.Bank;
+        Heading = cachePosition.Heading;
+        OnGround = 0UL;
+        Airspeed = 0UL;
+    }
+};
 
 //-----------------------------------------------------------------------------
 

@@ -11,7 +11,7 @@
 *                                                                                *
 **********************************************************************************/
 
-#include "VectorR3.h"
+#include <CacheManager/Transformations.h>
 
 #include <cmath>
 
@@ -20,36 +20,13 @@ namespace SimCache
 
 //-----------------------------------------------------------------------------
 
-double VectorR3::Norm()
+VectorR3 Transformations::FromEllipsoidal(double phi, double lambda, double h)
 {
-    return sqrt((X * X) + (Y * Y) + (Z * Z));
-}
-
-double VectorR3::NormSquared()
-{
-    return (X * X) + (Y * Y) + (Z * Z);
-}
-
-VectorR3 VectorR3::CrossProduct(VectorR3 rhs)
-{
-    return VectorR3((Y * rhs.Z) - (Z * rhs.Y), -((X * rhs.Z) - (Z * rhs.X)), (X * rhs.Y) - (Y * rhs.X));
-}
-
-double VectorR3::DotProduct(VectorR3 rhs)
-{
-    return (X * rhs.X) + (Y * rhs.Y) + (Z * rhs.Z);
-}
-
-VectorR3 operator +(VectorR3 u, VectorR3 v) {
-    return VectorR3(u.X + v.X, u.Y + v.Y, u.Z + v.Z);
-}
-
-VectorR3 operator -(VectorR3 u, VectorR3 v) {
-    return VectorR3(u.X - v.X, u.Y - v.Y, u.Z - v.Z);
-}
-
-VectorR3 operator *(VectorR3 u, double c) {
-    return VectorR3(u.X * c, u.Y * c, u.Z * c);
+    auto N = a / sqrt(1.0 - (eSquared * pow(sin(phi), 2.0)));
+    auto x = (N + h) * cos(phi) * cos(lambda);
+    auto y = (N + h) * cos(phi) * sin(lambda);
+    auto z = ((1.0 - eSquared) * N + h) * sin(phi);
+    return VectorR3(x, y, z);
 }
 
 //-----------------------------------------------------------------------------

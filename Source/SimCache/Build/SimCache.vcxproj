@@ -10,6 +10,7 @@
     <Import Project="$(SolutionDir)..\Root.props" />
     <Import Project="$(ConfigDirectory)Configurations.props" />
     <Import Project="$(ConfigDirectory)Cpp.props" />
+    <Import Condition="'$(CacheManagerImported)'==''" Project="$(SourceDirectory)CacheManager\Build\CacheManager.vcxproj.projimport" />
   </ImportGroup>
   <ItemDefinitionGroup>
     <ClCompile>
@@ -34,26 +35,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\AircraftCallback.h" />
-    <ClInclude Include="..\Source\Conversions.h" />
-    <ClInclude Include="..\Source\Cache.h" />
-    <ClInclude Include="..\Source\CacheManager.h" />
+    <ClInclude Include="..\Source\CachePositionAdapter.h" />
     <ClInclude Include="..\Source\PanelCallback.h" />
     <ClInclude Include="..\Source\SimCacheAircraftCallback.h" />
     <ClInclude Include="..\Source\SimCacheGaugeCallback.h" />
     <ClInclude Include="..\Source\SimCachePanelCallback.h" />
-    <ClInclude Include="..\Source\Transformations.h" />
-    <ClInclude Include="..\Source\VectorR3.h" />
     <ClInclude Include="..\Resources\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\AircraftCallback.cpp" />
     <ClCompile Include="..\Source\PanelCallback.cpp" />
-    <ClCompile Include="..\Source\CacheManager.cpp" />
     <ClCompile Include="..\Source\SimCache.cpp" />
-    <ClCompile Include="..\Source\Cache.cpp" />
     <ClCompile Include="..\Source\SimCacheGaugeCallback.cpp" />
-    <ClCompile Include="..\Source\Transformations.cpp" />
-    <ClCompile Include="..\Source\VectorR3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimCache_Def.def" />

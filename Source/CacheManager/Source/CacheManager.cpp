@@ -11,51 +11,28 @@
 *                                                                                *
 **********************************************************************************/
 
-#include "CacheManager.h"
+#include <CacheManager/CacheManager.h>
 
 namespace SimCache
 {
 
 //-----------------------------------------------------------------------------
 
-void Manager::SetSimConnect(HANDLE simConnect)
+void CacheManager::SetOnCacheChanged(std::function<void(ICache::Ptr const&)> const& f)
 {
-    m_simConnect = simConnect;
+    m_onCacheChanged = std::make_shared<std::function<void(ICache::Ptr const&)>>(f);
 }
 
 //-----------------------------------------------------------------------------
 
-void Manager::OnRecvAssignedObjectId(SIMCONNECT_RECV_ASSIGNED_OBJECT_ID * objData)
-{
-    switch (objData->dwRequestID)
-    {
-    case REQUEST_CREATE_SIMCACHE:
-        m_currentCacheId = objData->dwObjectID;
-        break;
-    }
-}
-
-//-----------------------------------------------------------------------------
-
-void Manager::DisplayCache(ICache::Ptr const & cacheToDisplay)
-{
-    if (m_currentCacheId != 0UL)
-    {
-        SimConnect_AIRemoveObject(m_simConnect, m_currentCacheId, REQUEST_REMOVE_SIMCACHE);
-    }
-    SimConnect_AICreateSimulatedObject(m_simConnect, "SimCache", cacheToDisplay->InitPosition(), REQUEST_CREATE_SIMCACHE);
-}
-
-//-----------------------------------------------------------------------------
-
-void Manager::AddCache(ICache::Ptr const& cacheToAdd)
+void CacheManager::AddCache(ICache::Ptr const& cacheToAdd)
 {
     m_caches.push_back(ICache::Ptr(cacheToAdd));
 }
 
 //-----------------------------------------------------------------------------
 
-ICache::Ptr Manager::NextCache()
+ICache::Ptr CacheManager::NextCache()
 {
     if (m_currentCache != --m_caches.end())
     {
@@ -65,12 +42,14 @@ ICache::Ptr Manager::NextCache()
     {
         m_currentCache = m_caches.begin();
     }
+
+    OnCacheChanged();
     return *m_currentCache;
 }
 
 //-----------------------------------------------------------------------------
 
-ICache::Ptr Manager::PreviousCache()
+ICache::Ptr CacheManager::PreviousCache()
 {
     if (m_currentCache != m_caches.begin())
     {
@@ -80,18 +59,30 @@ ICache::Ptr Manager::PreviousCache()
     {
         m_currentCache = --m_caches.end();
     }
+
+    OnCacheChanged();
     return *m_currentCache;
 }
 
 //-----------------------------------------------------------------------------
 
-ICache::Ptr Manager::CurrentCache() const
+ICache::Ptr CacheManager::CurrentCache() const
 {
     if (m_currentCache == m_caches.end())
     {
         return nullptr;
     }
     return *m_currentCache;
+}
+
+//-----------------------------------------------------------------------------
+
+void CacheManager::OnCacheChanged()
+{
+    if (m_onCacheChanged != nullptr)
+    {
+        (*m_onCacheChanged)(*m_currentCache);
+    }
 }
 
 //-----------------------------------------------------------------------------

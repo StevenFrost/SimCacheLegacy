@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{26FC2445-4C05-4808-9F1E-E0BA6017636C}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectName>CacheManager</ProjectName>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(SolutionDir)..\Root.props" />
+    <Import Project="$(ConfigDirectory)Configurations.props" />
+    <Import Project="$(ConfigDirectory)Cpp.props" />
+    <Import Project="$(SourceDirectory)CacheManager\Build\CacheManager.vcxproj.projimport" />
+  </ImportGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>
+        WIN32_LEAN_AND_MEAN;
+        _USE_MATH_DEFINES;
+        %(PreprocessorDefinitions)
+      </PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Source\Conversions.h" />
+    <ClInclude Include="..\Inc\CacheManager\Cache.h" />
+    <ClInclude Include="..\Inc\CacheManager\CacheManager.h" />
+    <ClInclude Include="..\Inc\CacheManager\Transformations.h" />
+    <ClInclude Include="..\Inc\CacheManager\VectorR3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Source\CacheManager.cpp" />
+    <ClCompile Include="..\Source\Cache.cpp" />
+    <ClCompile Include="..\Source\Transformations.cpp" />
+    <ClCompile Include="..\Source\VectorR3.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

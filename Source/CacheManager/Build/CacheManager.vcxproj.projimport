@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup>
+    <Import Condition="'$(CacheManagerImported)' == 'true'" Project="Error attempting to import CacheManager, imported twice." />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(ProjectName)' != 'CacheManager'">
+    <CacheManagerImported>true</CacheManagerImported>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>
+        $(SourceDirectory)CacheManager\Inc;
+        %(AdditionalIncludeDirectories)
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup Condition="'$(ProjectName)' != 'CacheManager'">
+    <ProjectReference Include="$(SourceDirectory)CacheManager\Build\CacheManager.vcxproj">
+      <Project>{26FC2445-4C05-4808-9F1E-E0BA6017636C}</Project>
+      <Name>CacheManager</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+      <UseLibraryDependencyImports>false</UseLibraryDependencyImports>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemDefinitionGroup Condition="'$(ProjectName)' != 'CacheManager'">
+    <Link>
+      <AdditionalDependencies>
+        $(LibPath)CacheManager\CacheManager$(Suffix).lib;
+        %(AdditionalDependencies)
+      </AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>

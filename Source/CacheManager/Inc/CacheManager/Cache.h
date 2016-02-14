@@ -13,53 +13,63 @@
 
 #pragma once
 
-#include <gauges.h>
+#include <memory>
+#include <string>
 
-#include <CacheManager/CacheManager.h>
+#include <CacheManager/Transformations.h>
+#include <CacheManager/VectorR3.h>
 
 namespace SimCache
 {
 
 //-----------------------------------------------------------------------------
 
-class SimCacheGaugeCallback : public IGaugeCCallback
+struct CachePosition
+{
+    double Latitude;
+    double Longitude;
+    double Altitude;
+    double Pitch;
+    double Bank;
+    double Heading;
+};
+
+//-----------------------------------------------------------------------------
+
+class ICache
 {
 public:
-    SimCacheGaugeCallback(UINT32 containerId);
+    typedef std::shared_ptr<ICache> Ptr;
 
-    ULONG AddRef();
-    ULONG Release();
+    virtual ~ICache() {}
 
-    IGaugeCCallback* QueryInterface(PCSTRINGZ object) { return nullptr; }
-    void Update(); // Called on a 18Hz cycle
+    virtual std::string const& GetName() const = 0;
+    virtual std::string const& GetHint() const = 0;
+    virtual CachePosition GetPosition() const = 0;
+    virtual double GetDistance(VectorR3 position) const = 0;
+};
 
-    bool GetPropertyValue(SINT32 id, FLOAT64* value);
-    bool GetPropertyValue(SINT32 id, PCSTRINGZ* value);
-    bool SetPropertyValue(SINT32 id, FLOAT64 value);
-    bool SetPropertyValue(SINT32 id, PCSTRINGZ value);
+//-----------------------------------------------------------------------------
 
-    IGaugeCDrawable* CreateGaugeCDrawable(SINT32 id, const IGaugeCDrawableCreateParameters* parameters);
+class Factory
+{
+public:
+    static ICache::Ptr Make(
+        std::string const& name,
+        double latitude,
+        double longitude,
+        double altitude
+    );
 
-    double GetSimCacheDistance() const;
-    const char* GetSimCacheName() const;
-    const char* GetSimCacheHint() const;
-    const char* GetSimCacheStatus() const;
-
-    double GetSimCacheIndex() const;
-    void SetSimCacheIndex(double value);
-
-private:
-    ULONG m_refCount;
-    UINT32 m_containerId;
-
-    double m_distanceToSimCache;
-    double m_simCacheIndex;
-
-    ENUM m_unitsRadians;
-    ENUM m_unitsMeters;
-    ENUM m_aircraftVarLatitude;
-    ENUM m_aircraftVarLongitude;
-    ENUM m_aircraftVarAltitude;
+    static ICache::Ptr Make(
+        std::string const& name,
+        std::string const& hint,
+        double latitude,
+        double longitude,
+        double altitude,
+        double alertDistance,
+        double acquireDistance
+    );
 };
 
 //-----------------------------------------------------------------------------
