@@ -33,7 +33,7 @@ A Microsoft Flight like Aerocache experience for Microsoft Flight Simulator X an
     pixel_size=250,70
     visible=0
     sizable=0
-    gauge01=SimCache!SimCache, 0,0
+    gauge00=SimCache!SimCache, 0,0
     ```
 
 6. Launch the simulator and accept any security warnings related to `SimCache.dll`.
