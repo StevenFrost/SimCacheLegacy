@@ -26,7 +26,7 @@ namespace Localization
 
 //-----------------------------------------------------------------------------
 
-static std::string g_locale;
+static std::string g_locale = "en-US";
 
 //-----------------------------------------------------------------------------
 
@@ -88,12 +88,23 @@ std::string GetCurrentLocale()
 
 //-----------------------------------------------------------------------------
 
-std::string const& GetString(std::string const& id)
+void InitLocale()
 {
-    if (g_locale == "")
+    try
     {
         g_locale = GetCurrentLocale();
     }
+    catch (std::exception const&)
+    {
+        // We fall back to en-US if there was a problem getting the current locale.
+        g_locale = "en-US";
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+std::string const& GetString(std::string const& id)
+{
     return GetString(g_locale, id);
 }
 

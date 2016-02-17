@@ -32,6 +32,8 @@ struct StringResourceNotFoundException : public std::exception
 
 //-----------------------------------------------------------------------------
 
+void InitLocale();
+
 std::string const& GetString(std::string const& id);
 std::string const& GetString(std::string const& locale, std::string const& id);
 

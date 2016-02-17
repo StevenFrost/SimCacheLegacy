@@ -21,6 +21,7 @@
 #include <CacheManager/CacheManager.h>
 #include <CacheManager/Transformations.h>
 #include <CacheManager/VectorR3.h>
+#include <Localization/Resolver.h>
 #include <SimConnect.h>
 
 #include "PanelCallback.h"
@@ -221,6 +222,7 @@ void FSAPI module_deinit(void)
 
 BOOL WINAPI DllMain(HINSTANCE dll, DWORD reason, LPVOID reserved)
 {
+    SimCache::Localization::InitLocale();
     return TRUE;
 }
 
