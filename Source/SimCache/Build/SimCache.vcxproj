@@ -11,6 +11,7 @@
     <Import Project="$(ConfigDirectory)Configurations.props" />
     <Import Project="$(ConfigDirectory)Cpp.props" />
     <Import Condition="'$(CacheManagerImported)'==''" Project="$(SourceDirectory)CacheManager\Build\CacheManager.vcxproj.projimport" />
+    <Import Condition="'$(LocalizationImported)'==''" Project="$(SourceDirectory)Localization\Build\Localization.vcxproj.projimport" />
   </ImportGroup>
   <ItemDefinitionGroup>
     <ClCompile>

@@ -1,0 +1,6 @@
+distance_l2nm=Less than 2 nm away
+distance_l5nm=Less than 5 nm away
+distance_l10nm=Less than 10 nm away
+distance_l25nm=Less than 25 nm away
+distance_l50nm=Less than 50 nm away
+distance_g50nm=Greater than 50 nm away

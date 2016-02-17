@@ -13,6 +13,8 @@
 
 #include "SimCacheGaugeCallback.h"
 
+#include <Localization/Resolver.h>
+
 namespace SimCache
 {
 
@@ -184,25 +186,25 @@ const char* SimCacheGaugeCallback::GetSimCacheStatus() const
 {
     if (m_distanceToSimCache < 1852 * 2)
     {
-        return "Less than 2 nm away";
+        return Localization::GetString("distance_l2nm").c_str();
     }
     else if (m_distanceToSimCache < 1852 * 5)
     {
-        return "Less than 5 nm away";
+        return Localization::GetString("distance_l5nm").c_str();
     }
     else if (m_distanceToSimCache < 1852 * 10)
     {
-        return "Less than 10 nm away";
+        return Localization::GetString("distance_l10nm").c_str();
     }
     else if (m_distanceToSimCache < 1852 * 25)
     {
-        return "Less than 25 nm away";
+        return Localization::GetString("distance_l25nm").c_str();
     }
     else if (m_distanceToSimCache < 1852 * 50)
     {
-        return "Less than 50 nm away";
+        return Localization::GetString("distance_l50nm").c_str();
     }
-    return "Greater than 50 nm away";
+    return Localization::GetString("distance_g50nm").c_str();
 }
 
 //-----------------------------------------------------------------------------
