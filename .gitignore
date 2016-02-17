@@ -194,3 +194,6 @@ FakesAssemblies/
 
 # Cabdir output
 *.CAB
+
+# T4 Output
+StringResources.h
