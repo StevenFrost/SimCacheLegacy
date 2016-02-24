@@ -1,5 +1,5 @@
 # SimCache
-A Microsoft Flight like Aerocache experience for Microsoft Flight Simulator X and Lockheed Martin Prepar3D.
+A geocaching experience for Microsoft Flight Simulator X and Lockheed Martin Prepar3D inspired by Microsoft Flight's Aerocaches.
 
 # Installation
 1. Open `SimCache.sln` in Visual Studio 2013 or later and build in either Debug or Release configuration. Copy the resulting DLL to the FSX/ESP/P3D root directory.
